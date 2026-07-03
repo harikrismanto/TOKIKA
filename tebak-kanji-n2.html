@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tebak Kanji N2 — Latihan Kanji JLPT N2 Gratis | TOKIKA</title>
+<meta name="description" content="Latihan interaktif tebak 86 kanji N2 lengkap dengan arti dan cara baca on'yomi/kun'yomi. Gratis, langsung di browser.">
+<meta name="keywords" content="kanji N2, latihan kanji, JLPT N2, belajar kanji jepang">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.tokika.id/tebak-kanji-n4.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tebak Kanji N2 — Latihan Kanji JLPT N2 Gratis | TOKIKA">
+<meta property="og:description" content="Latihan interaktif tebak 86 kanji N2 lengkap dengan arti dan cara baca on'yomi/kun'yomi. Gratis, langsung di browser.">
+<meta property="og:url" content="https://www.tokika.id/tebak-kanji-n4.html">
+<meta property="og:site_name" content="TOKIKA">
+<meta property="og:locale" content="id_ID">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tebak Kanji N2 — Latihan Kanji JLPT N2 Gratis | TOKIKA">
+<meta name="twitter:description" content="Latihan interaktif tebak 86 kanji N2 lengkap dengan arti dan cara baca on'yomi/kun'yomi. Gratis, langsung di browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#1C1A18;
+    --paper2:#252220;
+    --card:#242120;
+    --ink:#EDE7DC;
+    --ink-soft:#948A7C;
+    --indigo:#7C9CC4;
+    --indigo-deep:#A9C2E0;
+    --vermillion:#E0644A;
+    --vermillion-deep:#F0906F;
+    --line:#3A352F;
+    --green:#7FBF93;
+    --green-bg:#22322A;
+    --red-bg:#3A2622;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -8%, rgba(224,100,74,0.09), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 100% 110%, rgba(124,156,196,0.08), transparent 60%),
+      var(--paper);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Zen Kaku Gothic New', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:28px 16px 60px;
+  }
+  /* subtle washi paper texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0; pointer-events:none; opacity:0.5;
+    background-image:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+  }
+  .wrap{ width:100%; max-width:560px; position:relative; }
+
+  /* ---------- Header ---------- */
+  header{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; gap:12px;}
+  .title-block h1{
+    font-family:'Shippori Mincho', serif;
+    font-weight:800;
+    font-size:34px;
+    margin:0 0 2px;
+    color:var(--indigo-deep);
+    letter-spacing:0.02em;
+  }
+  .title-block p{
+    margin:0; font-size:13px; color:var(--ink-soft); letter-spacing:0.03em;
+  }
+  .mode-switch{
+    display:flex; background:var(--paper2); border:1px solid var(--line); border-radius:999px; padding:3px; gap:2px; flex-shrink:0;
+  }
+  .mode-switch button{
+    border:none; background:transparent; padding:7px 13px; border-radius:999px;
+    font-family:'Zen Kaku Gothic New', sans-serif; font-size:12.5px; font-weight:700; color:var(--ink-soft);
+    cursor:pointer; transition:all .18s ease; white-space:nowrap;
+  }
+  .mode-switch button.active{ background:var(--indigo); color:#151412; box-shadow:0 2px 10px rgba(0,0,0,0.4); }
+
+  /* ---------- Stamp rally strip ---------- */
+  .rally{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px 16px;
+    margin-bottom:16px;
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+  }
+  .rally-stats{ display:flex; gap:18px; }
+  .stat{ display:flex; flex-direction:column; }
+  .stat .num{ font-family:'JetBrains Mono',monospace; font-weight:600; font-size:19px; color:var(--indigo-deep); line-height:1.1;}
+  .stat .lbl{ font-size:10.5px; color:var(--ink-soft); letter-spacing:0.06em; text-transform:uppercase; margin-top:2px;}
+  .stamps{ display:flex; gap:5px; }
+  .stamp-slot{
+    width:16px; height:16px; border-radius:4px; border:1.5px solid var(--line);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .stamp-slot.filled{ border-color:var(--vermillion); background:var(--vermillion); position:relative; }
+  .stamp-slot.filled::after{
+    content:"合"; font-family:'Shippori Mincho',serif; color:#fff; font-size:10px; font-weight:700;
+  }
+  .stamp-slot.miss{ border-color:var(--ink-soft); opacity:0.35; }
+
+  /* ---------- Card ---------- */
+  .stage{ position:relative; }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:38px 24px 30px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 12px 34px rgba(0,0,0,0.45);
+    transition:transform .15s ease;
+  }
+  .card.shake{ animation:shake .4s ease; }
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-7px);}
+    40%{transform:translateX(6px);}
+    60%{transform:translateX(-4px);}
+    80%{transform:translateX(3px);}
+  }
+  .card::before, .card::after{
+    content:""; position:absolute; border:1px solid var(--line); opacity:0.6;
+  }
+  .card::before{ inset:8px; border-radius:16px; pointer-events:none; }
+  .card::after{ display:none; }
+
+  .kanji-index{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft);
+    letter-spacing:0.08em;
+  }
+  .kanji-char{
+    font-family:'Shippori Mincho', serif;
+    font-weight:700;
+    font-size:120px;
+    line-height:1;
+    color:var(--ink);
+    margin:14px 0 6px;
+    user-select:none;
+  }
+  .reading-reveal{
+    min-height:46px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+    font-size:13.5px; color:var(--ink-soft);
+  }
+  .reading-reveal .r1{ color:var(--indigo); font-weight:700; }
+  .reading-reveal .r2{ color:var(--vermillion-deep); font-weight:700; }
+  .reading-reveal .word{ margin-top:4px; font-size:12.5px; color:var(--ink-soft); font-style:italic; }
+
+  /* hanko seal stamp animation */
+  .hanko{
+    position:absolute; top:18px; right:20px;
+    width:58px; height:58px; border:3px solid var(--vermillion);
+    border-radius:10px; color:var(--vermillion);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Shippori Mincho',serif; font-weight:800; font-size:15px;
+    transform:scale(1.6) rotate(-18deg); opacity:0;
+    pointer-events:none;
+  }
+  .hanko.show{ animation:stampIn .38s cubic-bezier(.2,1.4,.5,1) forwards; }
+  @keyframes stampIn{
+    0%{ transform:scale(1.8) rotate(-18deg); opacity:0; }
+    60%{ transform:scale(0.92) rotate(-8deg); opacity:1; }
+    100%{ transform:scale(1) rotate(-8deg); opacity:0.92; }
+  }
+  .miss-mark{
+    position:absolute; top:18px; right:20px;
+    width:58px; height:58px; border:3px solid var(--ink-soft);
+    border-radius:10px; color:var(--ink-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Shippori Mincho',serif; font-weight:800; font-size:22px;
+    transform:scale(1) rotate(-8deg); opacity:0;
+  }
+  .miss-mark.show{ animation:stampIn .38s cubic-bezier(.2,1.4,.5,1) forwards; opacity:0.55; }
+
+  /* ---------- Options ---------- */
+  .options{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+  .opt{
+    background:var(--card);
+    border:1.5px solid var(--line);
+    border-radius:13px;
+    padding:14px 12px;
+    font-family:'Zen Kaku Gothic New', sans-serif;
+    font-size:14.5px; font-weight:500; color:var(--ink);
+    cursor:pointer; text-align:left;
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .opt:hover:not(:disabled){ border-color:var(--indigo); transform:translateY(-1px); }
+  .opt:active:not(:disabled){ transform:translateY(0); }
+  .opt:disabled{ cursor:default; }
+  .opt.correct{ background:var(--green-bg); border-color:var(--green); color:var(--green); font-weight:700; }
+  .opt.wrong{ background:var(--red-bg); border-color:var(--vermillion); color:var(--vermillion-deep); font-weight:700; }
+  .opt.dim{ opacity:0.45; }
+
+  .next-row{ display:flex; justify-content:center; margin-top:20px; min-height:44px; }
+  .next-btn{
+    background:var(--indigo); color:#151412; border:none; border-radius:999px;
+    padding:12px 30px; font-family:'Zen Kaku Gothic New',sans-serif; font-weight:700; font-size:14px;
+    cursor:pointer; letter-spacing:0.02em; box-shadow:0 6px 18px rgba(0,0,0,0.45);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .next-btn:hover{ transform:translateY(-2px); box-shadow:0 9px 22px rgba(0,0,0,0.5); }
+  .next-btn:active{ transform:translateY(0); }
+
+  footer{ text-align:center; margin-top:26px; font-size:11.5px; color:var(--ink-soft); letter-spacing:0.03em; }
+
+  @media (prefers-reduced-motion: reduce){
+    .card.shake, .hanko.show, .miss-mark.show{ animation:none !important; }
+  }
+  @media (max-width:420px){
+    .kanji-char{ font-size:92px; }
+    .title-block h1{ font-size:28px; }
+    .options{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title-block">
+      <h1>漢字帳</h1>
+      <p>Tebak Kanji · JLPT N2</p>
+    </div>
+    <div class="mode-switch">
+      <button id="modeMeaning" class="active">Arti</button>
+      <button id="modeReading">Bacaan</button>
+    </div>
+  </header>
+
+  <div class="rally">
+    <div class="rally-stats">
+      <div class="stat"><span class="num" id="statScore">0</span><span class="lbl">Benar</span></div>
+      <div class="stat"><span class="num" id="statStreak">0</span><span class="lbl">Runtutan</span></div>
+      <div class="stat"><span class="num" id="statBest">0</span><span class="lbl">Terbaik</span></div>
+    </div>
+    <div class="stamps" id="stampRow"></div>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="hanko" id="hanko">正解</div>
+      <div class="miss-mark" id="missMark">✕</div>
+      <div class="kanji-index" id="kanjiIndex">01 / 100</div>
+      <div class="kanji-char" id="kanjiChar">新</div>
+      <div class="reading-reveal" id="readingReveal"></div>
+    </div>
+
+    <div class="options" id="options"></div>
+
+    <div class="next-row" id="nextRow"></div>
+  </div>
+
+  <footer>Kartu diacak dari kanji tingkat N2 · Ulangi kartu sebanyak yang kamu mau</footer>
+</div>
+
+<script>
+const KANJI = [
+["維","イ","—","mempertahankan","維持 (iji) — mempertahankan"], ["持","ジ","も(つ)","memegang / mempertahankan","維持 (iji) — mempertahankan"],
+["継","ケイ","つ(ぐ)","melanjutkan / mewarisi","継続 (keizoku) — berkelanjutan"], ["続","ゾク","つづ(く)","berlanjut","継続 (keizoku) — berkelanjutan"],
+["促","ソク","うなが(す)","mendorong","促進 (sokushin) — mendorong maju"], ["進","シン","すす(む)","maju","促進 (sokushin) — mendorong maju"],
+["推","スイ","お(す)","mendorong / menduga","推進 (suishin) — mendorong maju"], ["導","ドウ","みちび(く)","memandu","導入 (dounyuu) — memperkenalkan"],
+["採","サイ","と(る)","memetik / merekrut","採用 (saiyou) — merekrut"], ["択","タク","—","memilih","選択 (sentaku) — pilihan"],
+["施","シ","ほどこ(す)","melaksanakan","実施 (jisshi) — pelaksanaan"], ["制","セイ","—","sistem / kendali","制度 (seido) — sistem"],
+["規","キ","—","aturan/standar","規則 (kisoku) — peraturan"], ["則","ソク","—","aturan","規則 (kisoku) — peraturan"],
+["限","ゲン","かぎ(る)","batas","制限 (seigen) — pembatasan"], ["抑","ヨク","おさ(える)","menekan","抑制 (yokusei) — pengendalian"],
+["緩","カン","ゆる(い)","longgar / meredakan","緩和 (kanwa) — pelonggaran"], ["和","ワ","やわ(らげる)","damai / melunakkan","緩和 (kanwa) — pelonggaran"],
+["強","キョウ","つよ(い)","kuat","強化 (kyouka) — penguatan"], ["拡","カク","ひろ(げる)","memperluas","拡大 (kakudai) — perluasan"],
+["縮","シュク","ちぢ(む)","menyusut","縮小 (shukushou) — pengecilan"], ["削","サク","けず(る)","memangkas","削減 (sakugen) — pemangkasan"],
+["減","ゲン","へ(る)","berkurang","削減 (sakugen) — pemangkasan"], ["節","セツ","ふし","hemat / ruas","節約 (setsuyaku) — berhemat"],
+["約","ヤク","—","janji / kira-kira","予約 (yoyaku) — reservasi"], ["浪","ロウ","—","boros / gelombang","浪費 (rouhi) — pemborosan"],
+["投","トウ","な(げる)","melempar / investasi","投資 (toushi) — investasi"], ["資","シ","—","modal","投資 (toushi) — investasi"],
+["融","ユウ","—","cair / keuangan","融資 (yuushi) — pinjaman"], ["担","タン","かつ(ぐ)","menanggung","負担 (futan) — beban"],
+["負","フ","ま(ける)","kalah / menanggung","負担 (futan) — beban"], ["析","セキ","—","menganalisis","分析 (bunseki) — analisis"],
+["把","ハ","—","memegang/memahami","把握 (haaku) — memahami"], ["握","アク","にぎ(る)","menggenggam","把握 (haaku) — memahami"],
+["認","ニン","みと(める)","mengakui","認識 (ninshiki) — kesadaran"], ["識","シキ","—","pengetahuan/kesadaran","意識 (ishiki) — kesadaran"],
+["証","ショウ","—","bukti","検証 (kenshou) — verifikasi"], ["拠","キョ","—","dasar/landasan","証拠 (shouko) — bukti"],
+["張","チョウ","は(る)","merentangkan / mengklaim","主張 (shuchou) — argumen"], ["批","ヒ","—","kritik","批判 (hihan) — kritik"],
+["評","ヒョウ","—","penilaian","評価 (hyouka) — evaluasi"], ["依","イ","—","bergantung","依存 (izon) — ketergantungan"],
+["存","ゾン","—","ada / eksis","依存 (izon) — ketergantungan"], ["頼","ライ","たの(む)","meminta tolong","依頼 (irai) — permintaan"],
+["託","タク","—","menitipkan","委託 (itaku) — outsourcing"], ["委","イ","ゆだ(ねる)","mempercayakan","委託 (itaku) — outsourcing"],
+["譲","ジョウ","ゆず(る)","menyerahkan/mengalah","譲渡 (jouto) — transfer kepemilikan"], ["渡","ト","わた(る)","menyeberang / menyerahkan","譲渡 (jouto) — transfer kepemilikan"],
+["交","コウ","まじ(わる)","berselang / bertukar","交渉 (koushou) — negosiasi"], ["渉","ショウ","—","berhubungan","交渉 (koushou) — negosiasi"],
+["協","キョウ","—","kerja sama","協力 (kyouryoku) — kerja sama"], ["携","ケイ","たずさ(わる)","membawa/bekerja sama","連携 (renkei) — kolaborasi"],
+["統","トウ","す(べる)","menyatukan / memimpin","統合 (tougou) — integrasi"], ["散","サン","ち(る)","tersebar","分散 (bunsan) — desentralisasi"],
+["徹","テツ","—","menembus / konsisten","徹底 (tettei) — menyeluruh"], ["底","テイ","そこ","dasar","徹底 (tettei) — menyeluruh"],
+["挑","チョウ","いど(む)","menantang","挑戦 (chousen) — tantangan"], ["戦","セン","たたか(う)","perang / bertarung","挑戦 (chousen) — tantangan"],
+["克","コク","—","mengatasi","克服 (kokufuku) — mengatasi kesulitan"], ["服","フク","—","pakaian / menaklukkan","克服 (kokufuku) — mengatasi kesulitan"],
+["突","トツ","つ(く)","menembus tiba-tiba","突破 (toppa) — menembus rekor"], ["破","ハ","やぶ(る)","merobek / memecahkan","突破 (toppa) — menembus rekor"],
+["著","チョ","いちじる(しい)","mencolok / karya tulis","著しい (ichijirushii) — signifikan"], ["応","オウ","こた(える)","merespons","対応 (taiou) — menangani"],
+["適","テキ","—","cocok / sesuai","適切 (tekisetsu) — tepat"], ["柔","ジュウ","やわ(らかい)","lembut / fleksibel","柔軟 (juunan) — fleksibel"],
+["軟","ナン","やわ(らかい)","lunak","柔軟 (juunan) — fleksibel"], ["曖","アイ","—","kabur/ambigu","曖昧 (aimai) — ambigu"],
+["昧","マイ","—","gelap/kabur","曖昧 (aimai) — ambigu"], ["確","カク","たし(か)","pasti/akurat","明確 (meikaku) — jelas"],
+["欠","ケツ","か(ける)","kurang/absen","不可欠 (fukaketsu) — esensial"], ["深","シン","ふか(い)","dalam","深刻 (shinkoku) — serius"],
+["刻","コク","きざ(む)","mengukir / waktu","深刻 (shinkoku) — serius"], ["率","リツ","ひき(いる)","rasio / memimpin","率直 (socchoku) — terus terang"],
+["直","チョク","なお(す)","langsung / lurus","率直 (socchoku) — terus terang"], ["滑","カツ","すべ(る)","licin / lancar","円滑 (enkatsu) — mulus"],
+["健","ケン","すこ(やか)","sehat","健全 (kenzen) — wajar/sehat"], ["全","ゼン","まった(く)","utuh / seluruh","健全 (kenzen) — wajar/sehat"],
+["概","ガイ","—","garis besar","概要 (gaiyou) — ringkasan"], ["詳","ショウ","くわ(しい)","rinci","詳細 (shousai) — detail"],
+["根","コン","ね","akar","根拠 (konkyo) — dasar alasan"], ["観","カン","—","pandangan","観点 (kanten) — sudut pandang"],
+["視","シ","—","melihat / meninjau","視点 (shiten) — perspektif"], ["段","ダン","—","tahap / anak tangga","手段 (shudan) — cara"],
+["効","コウ","き(く)","efek / manjur","効果 (kouka) — efek"], ["果","カ","は(たす)","buah / hasil","成果 (seika) — pencapaian"],
+];
+
+// Build entry objects
+const DECK = KANJI.map((e,i)=>({
+  k:e[0], on:e[1], kun:e[2], mean:e[3], word:e[4],
+  reading: (e[2] !== "—") ? e[2] : e[1]
+}));
+
+let order = [];
+let pos = 0;
+let score = 0, streak = 0, best = 0;
+let pageStamps = []; // array of true/false/null for current 10-question page
+let mode = "meaning"; // or "reading"
+let answered = false;
+let current = null;
+let correctText = "";
+
+const els = {
+  kanjiIndex: document.getElementById("kanjiIndex"),
+  kanjiChar: document.getElementById("kanjiChar"),
+  readingReveal: document.getElementById("readingReveal"),
+  options: document.getElementById("options"),
+  nextRow: document.getElementById("nextRow"),
+  card: document.getElementById("card"),
+  hanko: document.getElementById("hanko"),
+  missMark: document.getElementById("missMark"),
+  statScore: document.getElementById("statScore"),
+  statStreak: document.getElementById("statStreak"),
+  statBest: document.getElementById("statBest"),
+  stampRow: document.getElementById("stampRow"),
+  modeMeaning: document.getElementById("modeMeaning"),
+  modeReading: document.getElementById("modeReading"),
+};
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function newOrder(){
+  order = shuffle(DECK.map((_,i)=>i));
+  pos = 0;
+}
+
+function renderStamps(){
+  els.stampRow.innerHTML = "";
+  for(let i=0;i<10;i++){
+    const slot = document.createElement("div");
+    const v = pageStamps[i];
+    slot.className = "stamp-slot" + (v===true ? " filled" : v===false ? " miss" : "");
+    els.stampRow.appendChild(slot);
+  }
+}
+
+function renderStats(){
+  els.statScore.textContent = score;
+  els.statStreak.textContent = streak;
+  els.statBest.textContent = best;
+}
+
+function fieldFor(entry){
+  return mode === "meaning" ? entry.mean : entry.reading;
+}
+
+function buildQuestion(){
+  answered = false;
+  els.hanko.classList.remove("show");
+  els.missMark.classList.remove("show");
+  els.card.classList.remove("shake");
+  els.nextRow.innerHTML = "";
+
+  if(pos >= order.length){ newOrder(); }
+  if(pageStamps.length >= 10){ pageStamps = []; }
+
+  current = DECK[order[pos]];
+  const globalNum = (pos % DECK.length) + 1;
+  els.kanjiIndex.textContent = String(globalNum).padStart(2,"0") + " / " + DECK.length;
+  els.kanjiChar.textContent = current.k;
+  els.readingReveal.innerHTML = "";
+
+  correctText = fieldFor(current);
+
+  // build distractors: 3 unique other entries' field values
+  const pool = DECK.filter(d => d.k !== current.k);
+  const distractorEntries = shuffle(pool).slice(0,3);
+  let choiceTexts = [correctText, ...distractorEntries.map(fieldFor)];
+  // ensure uniqueness
+  choiceTexts = [...new Set(choiceTexts)];
+  while(choiceTexts.length < 4){
+    const extra = fieldFor(shuffle(pool)[0]);
+    if(!choiceTexts.includes(extra)) choiceTexts.push(extra);
+  }
+  choiceTexts = shuffle(choiceTexts);
+
+  els.options.innerHTML = "";
+  choiceTexts.forEach(text=>{
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.textContent = text;
+    btn.addEventListener("click", ()=> handleAnswer(btn, text));
+    els.options.appendChild(btn);
+  });
+
+  renderStamps();
+  renderStats();
+}
+
+function handleAnswer(btn, text){
+  if(answered) return;
+  answered = true;
+  const isCorrect = text === correctText;
+
+  [...els.options.children].forEach(b=>{
+    b.disabled = true;
+    if(b.textContent === correctText) b.classList.add("correct");
+    else if(b === btn) b.classList.add("wrong");
+    else b.classList.add("dim");
+  });
+
+  els.readingReveal.innerHTML =
+    `<div class="r1">on'yomi: ${current.on}</div>` +
+    `<div class="r2">kun'yomi: ${current.kun}</div>` +
+    `<div class="word">${current.word}</div>`;
+
+  if(isCorrect){
+    score++; streak++; if(streak>best) best = streak;
+    els.hanko.classList.add("show");
+    pageStamps[pageStamps.length] = true;
+  } else {
+    streak = 0;
+    els.missMark.classList.add("show");
+    els.card.classList.add("shake");
+    pageStamps[pageStamps.length] = false;
+  }
+
+  renderStats();
+  renderStamps();
+
+  const next = document.createElement("button");
+  next.className = "next-btn";
+  next.textContent = "Lanjut →";
+  next.addEventListener("click", ()=>{ pos++; buildQuestion(); });
+  els.nextRow.appendChild(next);
+}
+
+els.modeMeaning.addEventListener("click", ()=>{
+  if(mode==="meaning") return;
+  mode = "meaning";
+  els.modeMeaning.classList.add("active");
+  els.modeReading.classList.remove("active");
+  buildQuestion();
+});
+els.modeReading.addEventListener("click", ()=>{
+  if(mode==="reading") return;
+  mode = "reading";
+  els.modeReading.classList.add("active");
+  els.modeMeaning.classList.remove("active");
+  buildQuestion();
+});
+
+newOrder();
+buildQuestion();
+</script>
+</body>
+</html>

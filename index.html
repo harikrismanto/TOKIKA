@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOKIKA — Belajar Bahasa Jepang dari Nol | eBook & Latihan Kanji N5 N4</title>
+<meta name="description" content="TOKIKA menyediakan eBook dan latihan kanji interaktif JLPT N5-N4 untuk pemula. Belajar hiragana, katakana, kanji, dan kosakata dengan cara yang menyenangkan.">
+<meta name="keywords" content="belajar bahasa jepang, JLPT N5, JLPT N4, kanji, hiragana, katakana, ebook bahasa jepang, kotoba, tokika">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.tokika.id/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TOKIKA — Belajar Bahasa Jepang dari Nol | eBook & Latihan Kanji N5 N4">
+<meta property="og:description" content="TOKIKA menyediakan eBook dan latihan kanji interaktif JLPT N5-N4 untuk pemula. Belajar hiragana, katakana, kanji, dan kosakata dengan cara yang menyenangkan.">
+<meta property="og:url" content="https://www.tokika.id/">
+<meta property="og:site_name" content="TOKIKA">
+<meta property="og:locale" content="id_ID">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TOKIKA — Belajar Bahasa Jepang dari Nol | eBook & Latihan Kanji N5 N4">
+<meta name="twitter:description" content="TOKIKA menyediakan eBook dan latihan kanji interaktif JLPT N5-N4 untuk pemula. Belajar hiragana, katakana, kanji, dan kosakata dengan cara yang menyenangkan.">
+<link rel="alternate" hreflang="id" href="https://www.tokika.id/">
+<link rel="alternate" hreflang="en" href="https://www.tokika.id/">
+<link rel="alternate" hreflang="ja" href="https://www.tokika.id/">
+<link rel="alternate" hreflang="x-default" href="https://www.tokika.id/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#191B1D; --paper2:#212426; --card:#1F2224;
+    --ink:#E9E7E2; --ink-soft:#8D9296;
+    --indigo:#7C9CC4; --indigo-deep:#A9C2E0;
+    --vermillion:#E0644A; --vermillion-deep:#F0906F;
+    --line:#33383B; --green:#7FBF93;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ scroll-behavior:smooth; }
+  body{
+    background:
+      radial-gradient(ellipse 1000px 560px at 15% -6%, rgba(224,100,74,0.10), transparent 60%),
+      radial-gradient(ellipse 1000px 640px at 100% 20%, rgba(124,156,196,0.09), transparent 60%),
+      var(--paper);
+    background-attachment:fixed; color:var(--ink); font-family:'Zen Kaku Gothic New', sans-serif;
+    min-height:100vh;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:0.5; z-index:0;
+    background-image:repeating-linear-gradient(115deg, rgba(255,255,255,0.014) 0px, rgba(255,255,255,0.014) 1px, transparent 1px, transparent 3px);
+  }
+  a{ text-decoration:none; color:inherit; }
+  .container{ max-width:1040px; margin:0 auto; padding:0 20px; position:relative; z-index:1; }
+
+  /* ---------- Nav ---------- */
+  nav{ display:flex; align-items:center; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--line); }
+  .logo{ display:flex; align-items:center; gap:10px; }
+  .logo .seal{ width:36px; height:36px; border:2.5px solid var(--vermillion); border-radius:8px; color:var(--vermillion); display:flex; align-items:center; justify-content:center; font-family:'Shippori Mincho',serif; font-weight:800; font-size:16px; flex-shrink:0; }
+  .logo span{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:22px; letter-spacing:0.08em; color:var(--ink); }
+  .lang-switch{ display:flex; background:var(--paper2); border:1px solid var(--line); border-radius:999px; padding:3px; gap:2px; }
+  .lang-switch button{ border:none; background:transparent; padding:7px 13px; border-radius:999px; font-family:'Zen Kaku Gothic New',sans-serif; font-size:12.5px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:all .18s ease; }
+  .lang-switch button.active{ background:var(--indigo); color:#151412; box-shadow:0 2px 8px rgba(0,0,0,0.35); }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding:70px 0 60px; text-align:center; }
+  .hero .kicker{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.18em; color:var(--vermillion-deep); text-transform:uppercase; margin-bottom:16px; }
+  .hero h1{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:44px; line-height:1.35; color:var(--ink); margin-bottom:18px; }
+  .hero p{ font-size:15.5px; color:var(--ink-soft); max-width:520px; margin:0 auto 34px; line-height:1.7; }
+  .hero-ctas{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:14px 26px; border-radius:999px; font-weight:700; font-size:14.5px; cursor:pointer; border:none; transition:transform .12s ease, box-shadow .12s ease; }
+  .btn-primary{ background:var(--vermillion); color:#1c1a18; box-shadow:0 8px 22px rgba(224,100,74,0.28); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 11px 26px rgba(224,100,74,0.35); }
+  .btn-outline{ background:transparent; border:1.5px solid var(--line); color:var(--ink); }
+  .btn-outline:hover{ border-color:var(--indigo); transform:translateY(-2px); }
+
+  .hero-badges{ display:flex; gap:10px; justify-content:center; margin-top:38px; flex-wrap:wrap; }
+  .badge{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:6px 13px; background:var(--paper2); }
+
+  /* ---------- Section shared ---------- */
+  section{ padding:64px 0; border-top:1px solid var(--line); }
+  .section-head{ text-align:center; margin-bottom:40px; }
+  .section-head .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.14em; color:var(--indigo-deep); text-transform:uppercase; margin-bottom:10px; }
+  .section-head h2{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:30px; color:var(--ink); margin-bottom:10px; }
+  .section-head p{ color:var(--ink-soft); font-size:14px; max-width:480px; margin:0 auto; line-height:1.6; }
+
+  /* ---------- Ebook cards ---------- */
+  .ebook-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .ebook-card{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:28px; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+  .ebook-card::before{ content:""; position:absolute; inset:8px; border:1px solid var(--line); opacity:0.5; border-radius:14px; pointer-events:none; }
+  .ebook-level{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--vermillion-deep); letter-spacing:0.08em; margin-bottom:10px; }
+  .ebook-card h3{ font-family:'Shippori Mincho',serif; font-size:22px; font-weight:700; margin-bottom:10px; color:var(--ink); }
+  .ebook-card .desc{ font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin-bottom:18px; flex-grow:1; }
+  .ebook-card .feat{ list-style:none; margin-bottom:24px; }
+  .ebook-card .feat li{ font-size:12.5px; color:var(--ink-soft); padding:5px 0 5px 20px; position:relative; }
+  .ebook-card .feat li::before{ content:"◆"; position:absolute; left:0; color:var(--indigo-deep); font-size:9px; top:9px; }
+  .ebook-price{ font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; color:var(--ink); margin-bottom:16px; }
+  .ebook-price .old{ font-size:13px; color:var(--ink-soft); text-decoration:line-through; margin-left:8px; font-weight:400; }
+
+  /* ---------- Practice cards ---------- */
+  .practice-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .practice-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:24px 20px; text-align:center; transition:transform .15s ease, border-color .15s ease; position:relative; }
+  .practice-card:hover{ transform:translateY(-4px); border-color:var(--indigo); }
+  .practice-card .glyph{ font-family:'Shippori Mincho',serif; font-size:38px; font-weight:800; color:var(--ink); margin-bottom:10px; }
+  .practice-card .plevel{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--vermillion-deep); border:1px solid var(--line); border-radius:999px; padding:3px 10px; margin-bottom:10px; background:var(--paper2); }
+  .practice-card h4{ font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:6px; }
+  .practice-card .pdesc{ font-size:12px; color:var(--ink-soft); line-height:1.5; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:34px 0 50px; text-align:center; }
+  footer .logo{ justify-content:center; margin-bottom:14px; }
+  footer p{ font-size:11.5px; color:var(--ink-soft); letter-spacing:0.03em; }
+
+  @media (max-width:720px){
+    .hero h1{ font-size:30px; }
+    .ebook-grid{ grid-template-columns:1fr; }
+    .practice-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:460px){
+    .practice-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <nav>
+    <div class="logo">
+      <div class="seal">解</div>
+      <span>TOKIKA</span>
+    </div>
+    <div class="lang-switch">
+      <button data-lang="jp">日本語</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="id" class="active">ID</button>
+    </div>
+  </nav>
+
+  <section class="hero" style="border-top:none;">
+    <div class="kicker" data-i18n="kicker">BELAJAR BAHASA JEPANG DARI NOL</div>
+    <h1 data-i18n="heroTitle">Belajar Bahasa Jepang,<br>dengan Cara yang Menyenangkan.</h1>
+    <p data-i18n="heroSub">TOKIKA menyediakan eBook dan latihan kanji interaktif yang dirancang khusus untuk pemula — mulai dari nol sampai lancar baca kanji N5–N4.</p>
+    <div class="hero-ctas">
+      <a href="#ebook" class="btn btn-primary" data-i18n="ctaEbook">Pesan eBook</a>
+      <a href="#latihan" class="btn btn-outline" data-i18n="ctaLatihan">Mulai Latihan Kanji</a>
+    </div>
+    <div class="hero-badges">
+      <span class="badge">JLPT N5</span>
+      <span class="badge">JLPT N4</span>
+      <span class="badge">ひらがな・カタカナ</span>
+      <span class="badge" data-i18n="badgeFree">Latihan Gratis</span>
+    </div>
+  </section>
+
+  <section id="ebook">
+    <div class="section-head">
+      <div class="eyebrow" data-i18n="ebookEyebrow">EBOOK SERIES</div>
+      <h2 data-i18n="ebookTitle">Seri eBook TOKIKA</h2>
+      <p data-i18n="ebookDesc">Materi terstruktur, contoh kalimat, dan latihan soal — bisa dipelajari kapan saja lewat HP atau laptop.</p>
+    </div>
+    <div class="ebook-grid">
+      <div class="ebook-card">
+        <div class="ebook-level">TOKIKA · JLPT N5</div>
+        <h3 data-i18n="ebookN5Title">Starter Pack N5</h3>
+        <p class="desc" data-i18n="ebookN5Desc">Panduan lengkap untuk pemula total: huruf, kosakata dasar, dan tata bahasa inti level N5.</p>
+        <ul class="feat">
+          <li data-i18n="ebookN5F1">100+ kanji dasar lengkap contoh kalimat</li>
+          <li data-i18n="ebookN5F2">220+ kotoba (kosakata) N5 bergambar</li>
+          <li data-i18n="ebookN5F3">Panduan hiragana & katakana dari nol</li>
+          <li data-i18n="ebookN5F4">Latihan soal ala JLPT + kunci jawaban</li>
+        </ul>
+        <a class="btn btn-primary" href="https://wa.me/6280000000000?text=Halo%20TOKIKA%2C%20saya%20mau%20pesan%20eBook%20Starter%20Pack%20N5" target="_blank" data-i18n="orderBtn">Pesan via WhatsApp</a>
+      </div>
+      <div class="ebook-card">
+        <div class="ebook-level">TOKIKA · JLPT N4</div>
+        <h3 data-i18n="ebookN4Title">Next Step N4</h3>
+        <p class="desc" data-i18n="ebookN4Desc">Lanjutan untuk yang sudah menguasai N5 — kanji dan kosakata lebih luas plus pola kalimat menengah.</p>
+        <ul class="feat">
+          <li data-i18n="ebookN4F1">115+ kanji N4 lengkap contoh kalimat</li>
+          <li data-i18n="ebookN4F2">356+ kotoba N4 terkategori</li>
+          <li data-i18n="ebookN4F3">Tabel kata kerja & kata sifat penting</li>
+          <li data-i18n="ebookN4F4">Simulasi soal JLPT N4</li>
+        </ul>
+        <a class="btn btn-primary" href="https://wa.me/6280000000000?text=Halo%20TOKIKA%2C%20saya%20mau%20pesan%20eBook%20Next%20Step%20N4" target="_blank" data-i18n="orderBtn">Pesan via WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="latihan">
+    <div class="section-head">
+      <div class="eyebrow" data-i18n="practiceEyebrow">FREE PRACTICE</div>
+      <h2 data-i18n="practiceTitle">Latihan Kanji & Kosakata</h2>
+      <p data-i18n="practiceDesc">Coba dulu gratis sebelum beli eBook-nya — kartu interaktif dengan skor dan cap stempel hanko.</p>
+    </div>
+    <div class="practice-grid">
+      <a class="practice-card" href="tebak-kanji-n5.html" target="_blank">
+        <div class="glyph">漢字</div>
+        <div class="plevel">N5</div>
+        <h4 data-i18n="pKanjiN5">Tebak Kanji N5</h4>
+        <p class="pdesc" data-i18n="pKanjiN5d">100 kanji dasar, arti & bacaan</p>
+      </a>
+      <a class="practice-card" href="tebak-kanji-n4.html" target="_blank">
+        <div class="glyph">漢字</div>
+        <div class="plevel">N4</div>
+        <h4 data-i18n="pKanjiN4">Tebak Kanji N4</h4>
+        <p class="pdesc" data-i18n="pKanjiN4d">115 kanji lanjutan, arti & bacaan</p>
+      </a>
+      <a class="practice-card" href="tebak-kanji-n3.html" target="_blank">
+        <div class="glyph">漢字</div>
+        <div class="plevel">N3</div>
+        <h4 data-i18n="pKanjiN3">Tebak Kanji N3</h4>
+        <p class="pdesc" data-i18n="pKanjiN3d">103 kanji menengah, arti & bacaan</p>
+      </a>
+      <a class="practice-card" href="tebak-kanji-n2.html" target="_blank">
+        <div class="glyph">漢字</div>
+        <div class="plevel">N2</div>
+        <h4 data-i18n="pKanjiN2">Tebak Kanji N2</h4>
+        <p class="pdesc" data-i18n="pKanjiN2d">86 kanji bisnis & abstrak</p>
+      </a>
+      <a class="practice-card" href="kotoba-n5.html" target="_blank">
+        <div class="glyph">言葉</div>
+        <div class="plevel">N5</div>
+        <h4 data-i18n="pKotobaN5">Kotoba N5</h4>
+        <p class="pdesc" data-i18n="pKotobaN5d">221 kosakata berkanji, terkategori</p>
+      </a>
+      <a class="practice-card" href="kotoba-n4.html" target="_blank">
+        <div class="glyph">言葉</div>
+        <div class="plevel">N4</div>
+        <h4 data-i18n="pKotobaN4">Kotoba N4</h4>
+        <p class="pdesc" data-i18n="pKotobaN4d">356 kosakata berkanji, terkategori</p>
+      </a>
+      <a class="practice-card" href="kotoba-n3.html" target="_blank">
+        <div class="glyph">言葉</div>
+        <div class="plevel">N3</div>
+        <h4 data-i18n="pKotobaN3">Kotoba N3</h4>
+        <p class="pdesc" data-i18n="pKotobaN3d">157 kosakata berkanji, terkategori</p>
+      </a>
+      <a class="practice-card" href="kotoba-n2.html" target="_blank">
+        <div class="glyph">言葉</div>
+        <div class="plevel">N2</div>
+        <h4 data-i18n="pKotobaN2">Kotoba N2</h4>
+        <p class="pdesc" data-i18n="pKotobaN2d">115 kosakata bisnis & abstrak</p>
+      </a>
+      <a class="practice-card" href="kana-lengkap.html" target="_blank">
+        <div class="glyph">仮名</div>
+        <div class="plevel" data-i18n="pKanaLevel">DASAR</div>
+        <h4 data-i18n="pKana">Hiragana & Katakana</h4>
+        <p class="pdesc" data-i18n="pKanad">Gojuon, dakuten, yōon, lengkap</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo">
+      <div class="seal">解</div>
+      <span>TOKIKA</span>
+    </div>
+    <p data-i18n="footerText">© 2026 TOKIKA · Belajar bahasa Jepang dari nol, dengan cara yang menyenangkan.</p>
+  </footer>
+</div>
+
+<script>
+const I18N = {
+  kicker: { jp:"日本語をゼロから、楽しく学ぶ", en:"LEARN JAPANESE FROM ZERO", id:"BELAJAR BAHASA JEPANG DARI NOL" },
+  heroTitle: {
+    jp:"日本語を、<br>楽しく身につける。",
+    en:"Learn Japanese,<br>the Enjoyable Way.",
+    id:"Belajar Bahasa Jepang,<br>dengan Cara yang Menyenangkan."
+  },
+  heroSub: {
+    jp:"TOKIKAは初心者のためのeBookとインタラクティブな漢字トレーニングを提供しています。ゼロからN5〜N4レベルの漢字がすらすら読めるようになるまでサポートします。",
+    en:"TOKIKA offers eBooks and interactive kanji training built for absolute beginners — go from zero to comfortably reading N5–N4 kanji.",
+    id:"TOKIKA menyediakan eBook dan latihan kanji interaktif yang dirancang khusus untuk pemula — mulai dari nol sampai lancar baca kanji N5–N4."
+  },
+  ctaEbook: { jp:"eBookを注文する", en:"Order the eBook", id:"Pesan eBook" },
+  ctaLatihan: { jp:"漢字トレーニングを始める", en:"Start Kanji Training", id:"Mulai Latihan Kanji" },
+  badgeFree: { jp:"無料トレーニング", en:"Free Practice", id:"Latihan Gratis" },
+
+  ebookEyebrow: { jp:"EBOOK シリーズ", en:"EBOOK SERIES", id:"EBOOK SERIES" },
+  ebookTitle: { jp:"TOKIKA eBook シリーズ", en:"TOKIKA eBook Series", id:"Seri eBook TOKIKA" },
+  ebookDesc: {
+    jp:"構成された教材、例文、練習問題つき。スマホやパソコンでいつでも学べます。",
+    en:"Structured material, example sentences, and practice questions — study anytime on your phone or laptop.",
+    id:"Materi terstruktur, contoh kalimat, dan latihan soal — bisa dipelajari kapan saja lewat HP atau laptop."
+  },
+
+  ebookN5Title: { jp:"スターターパック N5", en:"Starter Pack N5", id:"Starter Pack N5" },
+  ebookN5Desc: {
+    jp:"完全初心者向けの完全ガイド：文字、基本語彙、N5コア文法。",
+    en:"A complete guide for absolute beginners: characters, core vocabulary, and N5 grammar.",
+    id:"Panduan lengkap untuk pemula total: huruf, kosakata dasar, dan tata bahasa inti level N5."
+  },
+  ebookN5F1: { jp:"例文付き基本漢字100以上", en:"100+ basic kanji with example sentences", id:"100+ kanji dasar lengkap contoh kalimat" },
+  ebookN5F2: { jp:"イラスト付きN5語彙220以上", en:"220+ illustrated N5 vocabulary", id:"220+ kotoba (kosakata) N5 bergambar" },
+  ebookN5F3: { jp:"ゼロからのひらがな・カタカナ講座", en:"Hiragana & katakana guide from zero", id:"Panduan hiragana & katakana dari nol" },
+  ebookN5F4: { jp:"JLPT形式の練習問題と解答", en:"JLPT-style practice questions with answer key", id:"Latihan soal ala JLPT + kunci jawaban" },
+
+  ebookN4Title: { jp:"ネクストステップ N4", en:"Next Step N4", id:"Next Step N4" },
+  ebookN4Desc: {
+    jp:"N5を修了した方向けの続編。より広い漢字・語彙と中級文型を収録。",
+    en:"The continuation for those who've completed N5 — wider kanji and vocabulary plus intermediate sentence patterns.",
+    id:"Lanjutan untuk yang sudah menguasai N5 — kanji dan kosakata lebih luas plus pola kalimat menengah."
+  },
+  ebookN4F1: { jp:"例文付きN4漢字115以上", en:"115+ N4 kanji with example sentences", id:"115+ kanji N4 lengkap contoh kalimat" },
+  ebookN4F2: { jp:"カテゴリ別N4語彙356以上", en:"356+ categorized N4 vocabulary", id:"356+ kotoba N4 terkategori" },
+  ebookN4F3: { jp:"重要動詞・形容詞の一覧表", en:"Table of key verbs & adjectives", id:"Tabel kata kerja & kata sifat penting" },
+  ebookN4F4: { jp:"JLPT N4模擬問題", en:"JLPT N4 simulation questions", id:"Simulasi soal JLPT N4" },
+  orderBtn: { jp:"WhatsAppで注文する", en:"Order via WhatsApp", id:"Pesan via WhatsApp" },
+
+  practiceEyebrow: { jp:"無料トレーニング", en:"FREE PRACTICE", id:"FREE PRACTICE" },
+  practiceTitle: { jp:"漢字・語彙トレーニング", en:"Kanji & Vocabulary Training", id:"Latihan Kanji & Kosakata" },
+  practiceDesc: {
+    jp:"eBook購入前にまず無料で試してみましょう。スコアとハンコ判定つきのインタラクティブカード。",
+    en:"Try it free before buying the eBook — interactive cards with scoring and a hanko stamp reveal.",
+    id:"Coba dulu gratis sebelum beli eBook-nya — kartu interaktif dengan skor dan cap stempel hanko."
+  },
+
+  pKanjiN5: { jp:"漢字 N5 クイズ", en:"Kanji N5 Quiz", id:"Tebak Kanji N5" },
+  pKanjiN5d: { jp:"基本漢字100、読みと意味", en:"100 basic kanji, meaning & reading", id:"100 kanji dasar, arti & bacaan" },
+  pKanjiN4: { jp:"漢字 N4 クイズ", en:"Kanji N4 Quiz", id:"Tebak Kanji N4" },
+  pKanjiN4d: { jp:"応用漢字115、読みと意味", en:"115 intermediate kanji, meaning & reading", id:"115 kanji lanjutan, arti & bacaan" },
+  pKanjiN3: { jp:"漢字 N3 クイズ", en:"Kanji N3 Quiz", id:"Tebak Kanji N3" },
+  pKanjiN3d: { jp:"中級漢字103、読みと意味", en:"103 upper-intermediate kanji, meaning & reading", id:"103 kanji menengah, arti & bacaan" },
+  pKanjiN2: { jp:"漢字 N2 クイズ", en:"Kanji N2 Quiz", id:"Tebak Kanji N2" },
+  pKanjiN2d: { jp:"ビジネス・抽象漢字86", en:"86 business & abstract kanji", id:"86 kanji bisnis & abstrak" },
+  pKotobaN5: { jp:"語彙 N5", en:"Kotoba N5", id:"Kotoba N5" },
+  pKotobaN5d: { jp:"漢字付き語彙221、カテゴリ別", en:"221 kanji vocabulary, categorized", id:"221 kosakata berkanji, terkategori" },
+  pKotobaN4: { jp:"語彙 N4", en:"Kotoba N4", id:"Kotoba N4" },
+  pKotobaN4d: { jp:"漢字付き語彙356、カテゴリ別", en:"356 kanji vocabulary, categorized", id:"356 kosakata berkanji, terkategori" },
+  pKotobaN3: { jp:"語彙 N3", en:"Kotoba N3", id:"Kotoba N3" },
+  pKotobaN3d: { jp:"漢字付き語彙157、カテゴリ別", en:"157 kanji vocabulary, categorized", id:"157 kosakata berkanji, terkategori" },
+  pKotobaN2: { jp:"語彙 N2", en:"Kotoba N2", id:"Kotoba N2" },
+  pKotobaN2d: { jp:"ビジネス・抽象語彙115", en:"115 business & abstract vocabulary", id:"115 kosakata bisnis & abstrak" },
+  pKanaLevel: { jp:"基礎", en:"BASICS", id:"DASAR" },
+  pKana: { jp:"ひらがな・カタカナ", en:"Hiragana & Katakana", id:"Hiragana & Katakana" },
+  pKanad: { jp:"五十音・濁点・拗音、完全網羅", en:"Gojuon, dakuten, yōon, complete", id:"Gojuon, dakuten, yōon, lengkap" },
+
+  footerText: {
+    jp:"© 2026 TOKIKA · ゼロから、楽しく日本語を身につけよう。",
+    en:"© 2026 TOKIKA · Learn Japanese from zero, the enjoyable way.",
+    id:"© 2026 TOKIKA · Belajar bahasa Jepang dari nol, dengan cara yang menyenangkan."
+  }
+};
+
+function setLang(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(I18N[key] && I18N[key][lang] !== undefined){
+      el.innerHTML = I18N[key][lang];
+    }
+  });
+  document.querySelectorAll('.lang-switch button').forEach(b=>{
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+  });
+  document.documentElement.lang = lang === 'jp' ? 'ja' : lang;
+}
+
+document.querySelectorAll('.lang-switch button').forEach(btn=>{
+  btn.addEventListener('click', ()=> setLang(btn.getAttribute('data-lang')));
+});
+
+setLang('id');
+</script>
+</body>
+</html>
