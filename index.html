@@ -61,7 +61,7 @@
   /* ---------- Hero ---------- */
   .hero{ padding:70px 0 60px; text-align:center; }
   .hero .kicker{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.18em; color:var(--vermillion-deep); text-transform:uppercase; margin-bottom:16px; }
-  .hero h1{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:44px; line-height:1.35; color:var(--ink); margin-bottom:18px; }
+  .hero h1{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:clamp(26px, 5.5vw, 44px); line-height:1.35; color:var(--ink); margin-bottom:18px; }
   .hero p{ font-size:15.5px; color:var(--ink-soft); max-width:520px; margin:0 auto 34px; line-height:1.7; }
   .hero-ctas{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
   .btn{ display:inline-flex; align-items:center; gap:8px; padding:14px 26px; border-radius:999px; font-weight:700; font-size:14.5px; cursor:pointer; border:none; transition:transform .12s ease, box-shadow .12s ease; }
@@ -77,11 +77,13 @@
   section{ padding:64px 0; border-top:1px solid var(--line); }
   .section-head{ text-align:center; margin-bottom:40px; }
   .section-head .eyebrow{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.14em; color:var(--indigo-deep); text-transform:uppercase; margin-bottom:10px; }
-  .section-head h2{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:30px; color:var(--ink); margin-bottom:10px; }
+  .section-head h2{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:clamp(22px, 4vw, 30px); color:var(--ink); margin-bottom:10px; }
   .section-head p{ color:var(--ink-soft); font-size:14px; max-width:480px; margin:0 auto; line-height:1.6; }
 
   /* ---------- Ebook cards ---------- */
-  .ebook-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .ebook-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:20px; }
+  .ebook-single{ display:flex; justify-content:center; }
+  .ebook-card.featured{ max-width:440px; width:100%; border-color:var(--vermillion); }
   .ebook-card{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:28px; position:relative; overflow:hidden; display:flex; flex-direction:column; }
   .ebook-card::before{ content:""; position:absolute; inset:8px; border:1px solid var(--line); opacity:0.5; border-radius:14px; pointer-events:none; }
   .ebook-level{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--vermillion-deep); letter-spacing:0.08em; margin-bottom:10px; }
@@ -94,7 +96,7 @@
   .ebook-price .old{ font-size:13px; color:var(--ink-soft); text-decoration:line-through; margin-left:8px; font-weight:400; }
 
   /* ---------- Practice cards ---------- */
-  .practice-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .practice-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:16px; }
   .practice-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:24px 20px; text-align:center; transition:transform .15s ease, border-color .15s ease; position:relative; }
   .practice-card:hover{ transform:translateY(-4px); border-color:var(--indigo); }
   .practice-card .glyph{ font-family:'Shippori Mincho',serif; font-size:38px; font-weight:800; color:var(--ink); margin-bottom:10px; }
@@ -103,9 +105,17 @@
   .practice-card .pdesc{ font-size:12px; color:var(--ink-soft); line-height:1.5; }
 
   /* ---------- Footer ---------- */
-  footer{ padding:34px 0 50px; text-align:center; }
-  footer .logo{ justify-content:center; margin-bottom:14px; }
-  footer p{ font-size:11.5px; color:var(--ink-soft); letter-spacing:0.03em; }
+  footer{ padding:34px 0 50px; }
+  footer .footer-top{ display:flex; flex-wrap:wrap; gap:30px; justify-content:space-between; padding-bottom:26px; border-bottom:1px solid var(--line); margin-bottom:20px; }
+  footer .footer-brand{ flex:1; min-width:220px; max-width:360px; }
+  footer .footer-about{ font-size:12.5px; color:var(--ink-soft); line-height:1.7; margin-top:10px; }
+  footer .footer-social{ min-width:180px; }
+  footer .footer-heading{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; color:var(--indigo-deep); text-transform:uppercase; margin-bottom:10px; }
+  footer .social-links{ display:flex; flex-direction:column; gap:8px; }
+  footer .social-links a{ font-size:13px; font-weight:700; color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:9px 14px; background:var(--card); transition:border-color .15s ease, transform .12s ease; }
+  footer .social-links a:hover{ border-color:var(--vermillion); transform:translateX(3px); }
+  footer .footer-bottom{ text-align:center; }
+  footer .footer-bottom p{ font-size:11.5px; color:var(--ink-soft); letter-spacing:0.03em; }
 
   @media (max-width:720px){
     .hero h1{ font-size:30px; }
@@ -114,6 +124,13 @@
   }
   @media (max-width:460px){
     .practice-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:360px){
+    nav{ flex-wrap:wrap; gap:10px; justify-content:center; text-align:center; }
+    .logo span{ font-size:19px; }
+  }
+  @media (min-width:1100px){
+    .container{ max-width:1100px; }
   }
 </style>
 </head>
@@ -152,33 +169,20 @@
     <div class="section-head">
       <div class="eyebrow" data-i18n="ebookEyebrow">EBOOK SERIES</div>
       <h2 data-i18n="ebookTitle">Seri eBook TOKIKA</h2>
-      <p data-i18n="ebookDesc">Materi terstruktur, contoh kalimat, dan latihan soal — bisa dipelajari kapan saja lewat HP atau laptop.</p>
+      <p data-i18n="ebookDesc">Panduan belajar yang santai dibaca, gampang dipahami, dan bisa kamu bawa ke mana saja.</p>
     </div>
-    <div class="ebook-grid">
-      <div class="ebook-card">
-        <div class="ebook-level">TOKIKA · JLPT N5</div>
-        <h3 data-i18n="ebookN5Title">Starter Pack N5</h3>
-        <p class="desc" data-i18n="ebookN5Desc">Panduan lengkap untuk pemula total: huruf, kosakata dasar, dan tata bahasa inti level N5.</p>
+    <div class="ebook-single">
+      <div class="ebook-card featured">
+        <div class="ebook-level">TOKIKA · EBOOK</div>
+        <h3 data-i18n="ebookMainTitle">Belajar Bahasa Jepang, Akhirnya Masuk Akal</h3>
+        <p class="desc" data-i18n="ebookMainDesc">Dari mengenal huruf sampai menyusun kalimat pertamamu &mdash; semua dijelaskan pelan-pelan pakai bahasa yang enak dibaca, bukan kaku kayak buku pelajaran biasa.</p>
         <ul class="feat">
-          <li data-i18n="ebookN5F1">100+ kanji dasar lengkap contoh kalimat</li>
-          <li data-i18n="ebookN5F2">220+ kotoba (kosakata) N5 bergambar</li>
-          <li data-i18n="ebookN5F3">Panduan hiragana & katakana dari nol</li>
-          <li data-i18n="ebookN5F4">Latihan soal ala JLPT + kunci jawaban</li>
+          <li data-i18n="ebookMainF1">Hiragana &amp; katakana dari nol</li>
+          <li data-i18n="ebookMainF2">Kanji dan kosakata tersusun rapi per tema</li>
+          <li data-i18n="ebookMainF3">Pola kalimat dijelaskan santai, bukan istilah linguistik</li>
+          <li data-i18n="ebookMainF4">Cocok dibaca pelan-pelan sambil santai</li>
         </ul>
-        <a class="btn btn-primary" href="https://wa.me/628579833190
-          3?text=Halo%20TOKIKA%2C%20saya%20mau%20pesan%20eBook%20Starter%20Pack%20N5" target="_blank" data-i18n="orderBtn">Pesan via WhatsApp</a>
-      </div>
-      <div class="ebook-card">
-        <div class="ebook-level">TOKIKA · JLPT N4</div>
-        <h3 data-i18n="ebookN4Title">Next Step N4</h3>
-        <p class="desc" data-i18n="ebookN4Desc">Lanjutan untuk yang sudah menguasai N5 — kanji dan kosakata lebih luas plus pola kalimat menengah.</p>
-        <ul class="feat">
-          <li data-i18n="ebookN4F1">115+ kanji N4 lengkap contoh kalimat</li>
-          <li data-i18n="ebookN4F2">356+ kotoba N4 terkategori</li>
-          <li data-i18n="ebookN4F3">Tabel kata kerja & kata sifat penting</li>
-          <li data-i18n="ebookN4F4">Simulasi soal JLPT N4</li>
-        </ul>
-        <a class="btn btn-primary" href="https://wa.me/6285798331903?text=Halo%20TOKIKA%2C%20saya%20mau%20pesan%20eBook%20Next%20Step%20N4" target="_blank" data-i18n="orderBtn">Pesan via WhatsApp</a>
+        <a class="btn btn-primary" href="https://lynk.id/tokika.id" target="_blank" data-i18n="orderBtn">Lihat &amp; Pesan di Lynk.id</a>
       </div>
     </div>
   </section>
@@ -244,15 +248,42 @@
         <h4 data-i18n="pKana">Hiragana & Katakana</h4>
         <p class="pdesc" data-i18n="pKanad">Gojuon, dakuten, yōon, lengkap</p>
       </a>
+      <a class="practice-card" href="latihan-soal.html" target="_blank">
+        <div class="glyph">模試</div>
+        <div class="plevel">N5・N4</div>
+        <h4 data-i18n="pExam">Latihan Soal ala JLPT</h4>
+        <p class="pdesc" data-i18n="pExamd">50 soal per level, mode kanji/furigana</p>
+      </a>
+      <a class="practice-card" href="reading-story.html" target="_blank">
+        <div class="glyph">読物</div>
+        <div class="plevel" data-i18n="pReadLevel">DASAR</div>
+        <h4 data-i18n="pRead">Latihan Membaca</h4>
+        <p class="pdesc" data-i18n="pReadd">Cerita mencakup semua huruf kana</p>
+      </a>
     </div>
   </section>
 
   <footer>
-    <div class="logo">
-      <div class="seal">解</div>
-      <span>TOKIKA</span>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="seal">解</div>
+          <span>TOKIKA</span>
+        </div>
+        <p class="footer-about" data-i18n="footerAbout">TOKIKA dibuat buat siapa pun yang mau belajar bahasa Jepang tanpa pusing sama istilah teknis. Materinya disusun santai, dijelaskan pelan-pelan, tapi tetap terstruktur dari dasar sampai lanjutan.</p>
+      </div>
+      <div class="footer-social">
+        <div class="footer-heading" data-i18n="footerSocialTitle">Ikuti Kami</div>
+        <div class="social-links">
+          <a href="https://youtube.com/@tokika-g4p?si=olTjCZnWlwGib5F4" target="_blank">YouTube</a>
+          <a href="https://www.tiktok.com/@tokika46?_r=1&_t=ZS-97pptYAKBvR" target="_blank">TikTok</a>
+          <a href="https://www.instagram.com/tokika.id?igsh=MWVlZmV5eGFnOWR3dA==" target="_blank">Instagram</a>
+        </div>
+      </div>
     </div>
-    <p data-i18n="footerText">© 2026 TOKIKA · Belajar bahasa Jepang dari nol, dengan cara yang menyenangkan.</p>
+    <div class="footer-bottom">
+      <p data-i18n="footerText">© 2026 TOKIKA · Belajar bahasa Jepang dari nol, dengan cara yang menyenangkan.</p>
+    </div>
   </footer>
 </div>
 
@@ -276,33 +307,22 @@ const I18N = {
   ebookEyebrow: { jp:"EBOOK シリーズ", en:"EBOOK SERIES", id:"EBOOK SERIES" },
   ebookTitle: { jp:"TOKIKA eBook シリーズ", en:"TOKIKA eBook Series", id:"Seri eBook TOKIKA" },
   ebookDesc: {
-    jp:"構成された教材、例文、練習問題つき。スマホやパソコンでいつでも学べます。",
-    en:"Structured material, example sentences, and practice questions — study anytime on your phone or laptop.",
-    id:"Materi terstruktur, contoh kalimat, dan latihan soal — bisa dipelajari kapan saja lewat HP atau laptop."
+    jp:"のんびり読める、わかりやすい学習ガイド。どこにでも持ち運べます。",
+    en:"A relaxed, easy-to-follow learning guide you can bring anywhere.",
+    id:"Panduan belajar yang santai dibaca, gampang dipahami, dan bisa kamu bawa ke mana saja."
   },
 
-  ebookN5Title: { jp:"スターターパック N5", en:"Starter Pack N5", id:"Starter Pack N5" },
-  ebookN5Desc: {
-    jp:"完全初心者向けの完全ガイド：文字、基本語彙、N5コア文法。",
-    en:"A complete guide for absolute beginners: characters, core vocabulary, and N5 grammar.",
-    id:"Panduan lengkap untuk pemula total: huruf, kosakata dasar, dan tata bahasa inti level N5."
+  ebookMainTitle: { jp:"日本語が、やっと分かる気がする。", en:"Japanese, Finally Makes Sense.", id:"Belajar Bahasa Jepang, Akhirnya Masuk Akal" },
+  ebookMainDesc: {
+    jp:"文字を覚えるところから最初の文を作れるようになるまで、堅苦しい教科書ではなく、読みやすい言葉でゆっくり解説します。",
+    en:"From learning the characters to building your first sentence — everything explained slowly in friendly language, not stiff textbook talk.",
+    id:"Dari mengenal huruf sampai menyusun kalimat pertamamu \u2014 semua dijelaskan pelan-pelan pakai bahasa yang enak dibaca, bukan kaku kayak buku pelajaran biasa."
   },
-  ebookN5F1: { jp:"例文付き基本漢字100以上", en:"100+ basic kanji with example sentences", id:"100+ kanji dasar lengkap contoh kalimat" },
-  ebookN5F2: { jp:"イラスト付きN5語彙220以上", en:"220+ illustrated N5 vocabulary", id:"220+ kotoba (kosakata) N5 bergambar" },
-  ebookN5F3: { jp:"ゼロからのひらがな・カタカナ講座", en:"Hiragana & katakana guide from zero", id:"Panduan hiragana & katakana dari nol" },
-  ebookN5F4: { jp:"JLPT形式の練習問題と解答", en:"JLPT-style practice questions with answer key", id:"Latihan soal ala JLPT + kunci jawaban" },
-
-  ebookN4Title: { jp:"ネクストステップ N4", en:"Next Step N4", id:"Next Step N4" },
-  ebookN4Desc: {
-    jp:"N5を修了した方向けの続編。より広い漢字・語彙と中級文型を収録。",
-    en:"The continuation for those who've completed N5 — wider kanji and vocabulary plus intermediate sentence patterns.",
-    id:"Lanjutan untuk yang sudah menguasai N5 — kanji dan kosakata lebih luas plus pola kalimat menengah."
-  },
-  ebookN4F1: { jp:"例文付きN4漢字115以上", en:"115+ N4 kanji with example sentences", id:"115+ kanji N4 lengkap contoh kalimat" },
-  ebookN4F2: { jp:"カテゴリ別N4語彙356以上", en:"356+ categorized N4 vocabulary", id:"356+ kotoba N4 terkategori" },
-  ebookN4F3: { jp:"重要動詞・形容詞の一覧表", en:"Table of key verbs & adjectives", id:"Tabel kata kerja & kata sifat penting" },
-  ebookN4F4: { jp:"JLPT N4模擬問題", en:"JLPT N4 simulation questions", id:"Simulasi soal JLPT N4" },
-  orderBtn: { jp:"WhatsAppで注文する", en:"Order via WhatsApp", id:"Pesan via WhatsApp" },
+  ebookMainF1: { jp:"ひらがな・カタカナをゼロから", en:"Hiragana & katakana from zero", id:"Hiragana & katakana dari nol" },
+  ebookMainF2: { jp:"テーマ別に整理された漢字と語彙", en:"Kanji and vocabulary organized by theme", id:"Kanji dan kosakata tersusun rapi per tema" },
+  ebookMainF3: { jp:"文型を専門用語なしでやさしく解説", en:"Sentence patterns explained simply, no jargon", id:"Pola kalimat dijelaskan santai, bukan istilah linguistik" },
+  ebookMainF4: { jp:"リラックスしながら読める構成", en:"Written to be read at a relaxed pace", id:"Cocok dibaca pelan-pelan sambil santai" },
+  orderBtn: { jp:"Lynk.idで見る・購入する", en:"View & Order on Lynk.id", id:"Lihat & Pesan di Lynk.id" },
 
   practiceEyebrow: { jp:"無料トレーニング", en:"FREE PRACTICE", id:"FREE PRACTICE" },
   practiceTitle: { jp:"漢字・語彙トレーニング", en:"Kanji & Vocabulary Training", id:"Latihan Kanji & Kosakata" },
@@ -331,7 +351,18 @@ const I18N = {
   pKanaLevel: { jp:"基礎", en:"BASICS", id:"DASAR" },
   pKana: { jp:"ひらがな・カタカナ", en:"Hiragana & Katakana", id:"Hiragana & Katakana" },
   pKanad: { jp:"五十音・濁点・拗音、完全網羅", en:"Gojuon, dakuten, yōon, complete", id:"Gojuon, dakuten, yōon, lengkap" },
+  pExam: { jp:"JLPT形式の模擬試験", en:"JLPT-style Mock Exam", id:"Latihan Soal ala JLPT" },
+  pExamd: { jp:"レベルごとに50問、漢字/ふりがな選択可", en:"50 questions per level, kanji/furigana mode", id:"50 soal per level, mode kanji/furigana" },
+  pReadLevel: { jp:"基礎", en:"BASICS", id:"DASAR" },
+  pRead: { jp:"読解練習", en:"Reading Practice", id:"Latihan Membaca" },
+  pReadd: { jp:"全仮名を網羅したストーリー", en:"Story covering all kana characters", id:"Cerita mencakup semua huruf kana" },
 
+  footerAbout: {
+    jp:"TOKIKAは、専門用語で悩まずに日本語を学びたいすべての人のために作られました。ゆっくり、でもしっかり基礎から応用まで進めます。",
+    en:"TOKIKA is built for anyone who wants to learn Japanese without getting lost in technical jargon. The material is relaxed but still structured from basics to advanced.",
+    id:"TOKIKA dibuat buat siapa pun yang mau belajar bahasa Jepang tanpa pusing sama istilah teknis. Materinya disusun santai, dijelaskan pelan-pelan, tapi tetap terstruktur dari dasar sampai lanjutan."
+  },
+  footerSocialTitle: { jp:"フォローする", en:"Follow Us", id:"Ikuti Kami" },
   footerText: {
     jp:"© 2026 TOKIKA · ゼロから、楽しく日本語を身につけよう。",
     en:"© 2026 TOKIKA · Learn Japanese from zero, the enjoyable way.",
