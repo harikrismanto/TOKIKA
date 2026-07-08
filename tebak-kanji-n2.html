@@ -37,7 +37,7 @@
     --red-bg:#3A2622;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0; width:100%; overflow-x:hidden;}
   body{
     background:
       radial-gradient(ellipse 900px 500px at 12% -8%, rgba(224,100,74,0.09), transparent 60%),
@@ -49,7 +49,7 @@
     min-height:100vh;
     display:flex;
     justify-content:center;
-    padding:28px 16px 60px;
+    padding:28px 20px 60px;
   }
   /* subtle washi paper texture */
   body::before{
@@ -61,11 +61,12 @@
   .wrap{ width:100%; max-width:560px; position:relative; }
 
   /* ---------- Header ---------- */
-  header{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; gap:12px;}
+  header{ margin-bottom:18px; }
+  .header-top{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   .title-block h1{
     font-family:'Shippori Mincho', serif;
     font-weight:800;
-    font-size:34px;
+    font-size:clamp(24px, 6vw, 34px);
     margin:0 0 2px;
     color:var(--indigo-deep);
     letter-spacing:0.02em;
@@ -141,7 +142,7 @@
   .kanji-char{
     font-family:'Shippori Mincho', serif;
     font-weight:700;
-    font-size:120px;
+    font-size:clamp(64px, 22vw, 120px);
     line-height:1;
     color:var(--ink);
     margin:14px 0 6px;
@@ -183,7 +184,7 @@
   .miss-mark.show{ animation:stampIn .38s cubic-bezier(.2,1.4,.5,1) forwards; opacity:0.55; }
 
   /* ---------- Options ---------- */
-  .options{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+  .options{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; margin-top:18px; }
   .opt{
     background:var(--card);
     border:1.5px solid var(--line);
@@ -216,17 +217,34 @@
   @media (prefers-reduced-motion: reduce){
     .card.shake, .hanko.show, .miss-mark.show{ animation:none !important; }
   }
-  @media (max-width:420px){
-    .kanji-char{ font-size:92px; }
-    .title-block h1{ font-size:28px; }
+  @media (max-width:340px){
     .options{ grid-template-columns:1fr; }
   }
+  @media (min-width:900px){
+    .wrap{ max-width:620px; }
+  }
+  .srs-row{ display:block; margin-top:10px; }
+  .srs-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .srs-switch{ display:inline-flex; background:var(--paper2); border:1px solid var(--line); border-radius:999px; padding:3px; gap:2px; flex-shrink:0; }
+  .srs-switch button{ border:none; background:transparent; padding:7px 16px; border-radius:999px; font-family:'Zen Kaku Gothic New', sans-serif; font-size:12.5px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:all .18s ease; white-space:nowrap; }
+  .srs-switch button.active{ background:var(--vermillion); color:#151412; }
+  .srs-help{ flex-shrink:0; width:26px; height:26px; border-radius:50%; border:1px solid var(--line); background:var(--paper2); color:var(--ink-soft); font-family:'JetBrains Mono',monospace; font-weight:700; font-size:12px; cursor:pointer; padding:0; line-height:1; }
+  .srs-info{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft); }
+  .srs-info button{ background:none; border:none; color:var(--indigo-deep); text-decoration:underline; cursor:pointer; font-family:inherit; font-size:11px; padding:0; margin-left:8px; }
+  .srs-modal-overlay{ position:fixed; inset:0; background:rgba(10,9,8,0.72); z-index:9999; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .srs-modal-overlay.hidden{ display:none; }
+  .srs-modal{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:26px 22px; max-width:360px; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+  .srs-modal h3{ font-family:'Shippori Mincho',serif; font-size:19px; color:var(--indigo-deep); margin:0 0 12px; }
+  .srs-modal p{ font-size:13px; line-height:1.65; color:var(--ink); margin:0 0 10px; }
+  .srs-modal .tag{ display:inline-block; background:var(--green-bg); color:var(--green); font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; margin-bottom:4px; }
+  .srs-modal button{ margin-top:12px; width:100%; background:var(--vermillion); color:#151412; border:none; border-radius:999px; padding:11px 0; font-weight:700; font-size:13.5px; cursor:pointer; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header>
+    <div class="header-top">
     <div class="title-block">
       <h1>漢字帳</h1>
       <p>Tebak Kanji · JLPT N2</p>
@@ -234,6 +252,29 @@
     <div class="mode-switch">
       <button id="modeMeaning" class="active">Arti</button>
       <button id="modeReading">Bacaan</button>
+    </div>
+    </div>
+    <div class="srs-row">
+      <div class="srs-top">
+        <div class="srs-switch">
+          <button id="srsOff" class="active">Acak</button>
+          <button id="srsOn">SRS</button>
+        </div>
+        <button class="srs-help" id="srsHelp" type="button">?</button>
+        <div class="srs-info" id="srsInfo"></div>
+      </div>
+    </div>
+
+    <div class="srs-modal-overlay hidden" id="srsModal">
+      <div class="srs-modal">
+        <span class="tag">APA ITU SRS?</span>
+        <h3>Spaced Repetition System</h3>
+        <p>SRS itu cara belajar yang niru gimana otak manusia paling gampang inget sesuatu.</p>
+        <p><b>Jawab benar</b> &rarr; kartu itu muncul lagi nanti, jaraknya makin lama tiap kali kamu jawab benar terus-terusan.</p>
+        <p><b>Jawab salah</b> &rarr; kartu itu balik muncul sebentar lagi di sesi yang sama, biar langsung diulang.</p>
+        <p>Hasilnya kamu lebih banyak latihan di kartu yang belum hafal, dan nggak buang waktu di kartu yang udah lancar. Progres disimpan otomatis di HP/browser ini.</p>
+        <button id="srsModalClose" type="button">Mengerti</button>
+      </div>
     </div>
   </header>
 
@@ -340,7 +381,88 @@ const els = {
   stampRow: document.getElementById("stampRow"),
   modeMeaning: document.getElementById("modeMeaning"),
   modeReading: document.getElementById("modeReading"),
+  srsOff: document.getElementById("srsOff"),
+  srsOn: document.getElementById("srsOn"),
+  srsInfo: document.getElementById("srsInfo"),
 };
+
+// ---------- SRS (spaced repetition) ----------
+const SRS_KEY = "tokika_srs_kanji_n2";
+let srsMode = false;
+let srsData = {};
+function loadSRS(){
+  try{ srsData = JSON.parse(localStorage.getItem(SRS_KEY)) || {}; }catch(e){ srsData = {}; }
+}
+function saveSRS(){
+  try{ localStorage.setItem(SRS_KEY, JSON.stringify(srsData)); }catch(e){}
+}
+function srsId(d){ return d.k; }
+function getSRS(id){
+  return srsData[id] || { ease:2.5, interval:0, due:0, reps:0 };
+}
+let missedQueue = [];
+let qCounter = 0;
+function gradeSRS(id, correct){
+  const s = getSRS(id);
+  const now = Date.now();
+  if(correct){
+    s.reps += 1;
+    if(s.reps === 1) s.interval = 10;
+    else if(s.reps === 2) s.interval = 1440;
+    else s.interval = Math.round(s.interval * s.ease);
+    s.ease = Math.min(s.ease + 0.1, 3.0);
+    s.due = now + s.interval * 60000;
+  } else {
+    s.reps = 0;
+    s.interval = 1;
+    s.ease = Math.max(s.ease - 0.2, 1.3);
+    s.due = now;
+    missedQueue.push({ id, showAt: qCounter + 2 + Math.floor(Math.random()*2) });
+  }
+  srsData[id] = s;
+  saveSRS();
+}
+function srsDueCount(){
+  const now = Date.now();
+  return DECK.filter(d => getSRS(srsId(d)).due <= now).length;
+}
+function pickSRSCard(){
+  qCounter++;
+  const ready = missedQueue.filter(m => m.showAt <= qCounter);
+  if(ready.length){
+    const pick = ready[0];
+    missedQueue = missedQueue.filter(m => m !== pick);
+    const found = DECK.find(d => srsId(d) === pick.id);
+    if(found) return found;
+  }
+  const now = Date.now();
+  const withState = DECK.map(d => ({ d, s: getSRS(srsId(d)) }));
+  const due = withState.filter(x => x.s.due <= now);
+  if(due.length){
+    due.sort((a,b)=> a.s.due - b.s.due);
+    return shuffle(due.slice(0, Math.min(5, due.length)))[0].d;
+  }
+  const unseen = withState.filter(x => x.s.reps === 0 && x.s.due === 0);
+  if(unseen.length){ return shuffle(unseen)[0].d; }
+  withState.sort((a,b)=> a.s.due - b.s.due);
+  return withState[0].d;
+}
+function renderSRSInfo(){
+  if(!els.srsInfo) return;
+  if(srsMode){
+    els.srsInfo.innerHTML = srsDueCount() + " kartu jatuh tempo <button id='srsReset'>reset</button>";
+    const rb = document.getElementById('srsReset');
+    if(rb) rb.addEventListener('click', ()=>{
+      if(confirm('Reset progres SRS untuk latihan ini?')){
+        srsData = {}; saveSRS(); buildQuestion();
+      }
+    });
+  } else {
+    els.srsInfo.innerHTML = "";
+  }
+}
+loadSRS();
+
 
 function shuffle(arr){
   const a = arr.slice();
@@ -386,9 +508,15 @@ function buildQuestion(){
   if(pos >= order.length){ newOrder(); }
   if(pageStamps.length >= 10){ pageStamps = []; }
 
-  current = DECK[order[pos]];
-  const globalNum = (pos % DECK.length) + 1;
-  els.kanjiIndex.textContent = String(globalNum).padStart(2,"0") + " / " + DECK.length;
+  if(srsMode){
+    current = pickSRSCard();
+    els.kanjiIndex.textContent = srsDueCount() + " kartu jatuh tempo";
+  } else {
+    current = DECK[order[pos]];
+    const globalNum = (pos % DECK.length) + 1;
+    els.kanjiIndex.textContent = String(globalNum).padStart(2,"0") + " / " + DECK.length;
+  }
+  renderSRSInfo();
   els.kanjiChar.textContent = current.k;
   els.readingReveal.innerHTML = "";
 
@@ -423,6 +551,7 @@ function handleAnswer(btn, text){
   if(answered) return;
   answered = true;
   const isCorrect = text === correctText;
+  if(srsMode){ gradeSRS(srsId(current), isCorrect); }
 
   [...els.options.children].forEach(b=>{
     b.disabled = true;
@@ -449,6 +578,7 @@ function handleAnswer(btn, text){
 
   renderStats();
   renderStamps();
+  renderSRSInfo();
 
   const next = document.createElement("button");
   next.className = "next-btn";
@@ -474,6 +604,29 @@ els.modeReading.addEventListener("click", ()=>{
 
 newOrder();
 buildQuestion();
+
+els.srsOff.addEventListener("click", ()=>{
+  if(!srsMode) return;
+  srsMode = false;
+  els.srsOff.classList.add("active"); els.srsOn.classList.remove("active");
+  buildQuestion();
+});
+els.srsOn.addEventListener("click", ()=>{
+  if(srsMode) return;
+  srsMode = true;
+  els.srsOn.classList.add("active"); els.srsOff.classList.remove("active");
+  buildQuestion();
+});
+
+document.getElementById("srsHelp").addEventListener("click", ()=>{
+  document.getElementById("srsModal").classList.remove("hidden");
+});
+document.getElementById("srsModalClose").addEventListener("click", ()=>{
+  document.getElementById("srsModal").classList.add("hidden");
+});
+document.getElementById("srsModal").addEventListener("click", (e)=>{
+  if(e.target.id === "srsModal") e.target.classList.add("hidden");
+});
 </script>
 </body>
 </html>
