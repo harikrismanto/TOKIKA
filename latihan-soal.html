@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Soal JLPT N5 &amp; N4 — TOKIKA</title>
+<meta name="description" content="Simulasi 50 soal ala JLPT untuk level N5 dan N4, dengan mode kanji penuh atau kanji plus furigana. Gratis, langsung di browser.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#191B1D; --paper2:#212426; --card:#1F2224;
+    --ink:#E9E7E2; --ink-soft:#8D9296;
+    --indigo:#7C9CC4; --indigo-deep:#A9C2E0;
+    --vermillion:#E0644A; --vermillion-deep:#F0906F;
+    --line:#33383B; --green:#7FBF93; --green-bg:#22322A; --red-bg:#3A2622;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0; width:100%; overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -8%, rgba(224,100,74,0.09), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 100% 110%, rgba(124,156,196,0.08), transparent 60%),
+      var(--paper);
+    background-attachment:fixed; color:var(--ink); font-family:'Zen Kaku Gothic New', sans-serif;
+    min-height:100vh; display:flex; justify-content:center; padding:28px 20px 60px;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:0.5;
+    background-image:repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+  }
+  .wrap{ width:100%; max-width:560px; position:relative; }
+  header{ margin-bottom:14px; }
+  .title-block h1{ font-family:'Shippori Mincho', serif; font-weight:800; font-size:clamp(24px,6vw,32px); margin:0 0 2px; color:var(--indigo-deep); letter-spacing:0.02em; }
+  .title-block p{ margin:0; font-size:13px; color:var(--ink-soft); letter-spacing:0.03em; }
+
+  .toggle-row{ display:flex; background:var(--paper2); border:1px solid var(--line); border-radius:14px; padding:4px; gap:4px; margin-top:12px; }
+  .toggle-row button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:10px; font-family:'Zen Kaku Gothic New', sans-serif; font-size:12.5px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:all .18s ease; text-align:center; }
+  .toggle-row button .sub{ display:block; font-weight:400; font-size:9.5px; opacity:0.8; margin-top:1px; }
+  .toggle-row button.active{ background:var(--indigo); color:#151412; box-shadow:0 2px 10px rgba(0,0,0,0.4); }
+  .toggle-row.mode button.active{ background:var(--vermillion); }
+
+  .rally{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin:16px 0; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+  .rally-stats{ display:flex; gap:18px; }
+  .stat{ display:flex; flex-direction:column; }
+  .stat .num{ font-family:'JetBrains Mono',monospace; font-weight:600; font-size:19px; color:var(--indigo-deep); line-height:1.1;}
+  .stat .lbl{ font-size:10.5px; color:var(--ink-soft); letter-spacing:0.06em; text-transform:uppercase; margin-top:2px;}
+  .progress-bar{ width:100%; height:6px; background:var(--paper2); border-radius:999px; overflow:hidden; margin-top:4px; }
+  .progress-fill{ height:100%; background:var(--vermillion); border-radius:999px; transition:width .25s ease; }
+
+  .stage{ position:relative; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:22px; padding:30px 22px 26px; text-align:center; position:relative; overflow:hidden; box-shadow:0 12px 34px rgba(0,0,0,0.45); transition:transform .15s ease; }
+  .card.shake{ animation:shake .4s ease; }
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 20%{transform:translateX(-7px);} 40%{transform:translateX(6px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(3px);} }
+  .card::before{ content:""; position:absolute; inset:8px; border:1px solid var(--line); opacity:0.6; border-radius:16px; pointer-events:none; }
+
+  .q-index{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft); letter-spacing:0.08em; display:flex; justify-content:center; gap:10px; align-items:center; }
+  .q-tag{ background:var(--paper2); border:1px solid var(--line); border-radius:999px; padding:2px 9px; font-size:10px; color:var(--indigo-deep); letter-spacing:0.03em; }
+
+  .prompt{ font-family:'Shippori Mincho', serif; font-size:clamp(22px,7vw,30px); line-height:2.1; color:var(--ink); margin:18px 0 6px; }
+  .prompt ruby{ ruby-align:center; }
+  .prompt rt{ font-family:'Zen Kaku Gothic New', sans-serif; font-size:0.38em; color:var(--indigo-deep); }
+  .blank{ display:inline-block; min-width:1.6em; border-bottom:2px solid var(--vermillion); color:var(--vermillion); margin:0 2px; }
+
+  .hanko{ position:absolute; top:18px; right:20px; width:52px; height:52px; border:3px solid var(--vermillion); border-radius:10px; color:var(--vermillion); display:flex; align-items:center; justify-content:center; font-family:'Shippori Mincho',serif; font-weight:800; font-size:13px; transform:scale(1.6) rotate(-18deg); opacity:0; pointer-events:none; }
+  .hanko.show{ animation:stampIn .38s cubic-bezier(.2,1.4,.5,1) forwards; }
+  @keyframes stampIn{ 0%{ transform:scale(1.8) rotate(-18deg); opacity:0; } 60%{ transform:scale(0.92) rotate(-8deg); opacity:1; } 100%{ transform:scale(1) rotate(-8deg); opacity:0.92; } }
+  .miss-mark{ position:absolute; top:18px; right:20px; width:52px; height:52px; border:3px solid var(--ink-soft); border-radius:10px; color:var(--ink-soft); display:flex; align-items:center; justify-content:center; font-family:'Shippori Mincho',serif; font-weight:800; font-size:20px; transform:scale(1) rotate(-8deg); opacity:0; }
+  .miss-mark.show{ animation:stampIn .38s cubic-bezier(.2,1.4,.5,1) forwards; opacity:0.55; }
+
+  .options{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; margin-top:16px; }
+  .opt{ background:var(--card); border:1.5px solid var(--line); border-radius:13px; padding:14px 12px; font-family:'Zen Kaku Gothic New', sans-serif; font-size:14.5px; font-weight:600; color:var(--ink); cursor:pointer; text-align:center; transition:border-color .15s ease, background .15s ease, transform .1s ease; }
+  .opt:hover:not(:disabled){ border-color:var(--indigo); transform:translateY(-1px); }
+  .opt:disabled{ cursor:default; }
+  .opt.correct{ background:var(--green-bg); border-color:var(--green); color:var(--green); }
+  .opt.wrong{ background:var(--red-bg); border-color:var(--vermillion); color:var(--vermillion-deep); }
+  .opt.dim{ opacity:0.45; }
+
+  .next-row{ display:flex; justify-content:center; margin-top:20px; min-height:44px; }
+  .next-btn{ background:var(--indigo); color:#151412; border:none; border-radius:999px; padding:12px 30px; font-family:'Zen Kaku Gothic New',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:0.02em; box-shadow:0 6px 18px rgba(0,0,0,0.45); transition:transform .12s ease, box-shadow .12s ease; }
+  .next-btn:hover{ transform:translateY(-2px); }
+
+  .start-panel{ background:var(--card); border:1px solid var(--line); border-radius:22px; padding:34px 24px; text-align:center; }
+  .start-panel p{ font-size:13px; color:var(--ink-soft); line-height:1.7; margin-bottom:20px; }
+  .start-btn{ background:var(--vermillion); color:#191B1D; border:none; border-radius:999px; padding:14px 34px; font-weight:700; font-size:14.5px; cursor:pointer; }
+
+  .results{ background:var(--card); border:1px solid var(--line); border-radius:22px; padding:30px 24px; text-align:center; }
+  .results .score{ font-family:'Shippori Mincho',serif; font-size:52px; font-weight:800; color:var(--vermillion); margin:6px 0; }
+  .results .score-label{ font-size:12px; color:var(--ink-soft); letter-spacing:0.05em; text-transform:uppercase; }
+  .results .verdict{ font-size:14px; font-weight:700; margin:14px 0 20px; }
+  .verdict.pass{ color:var(--green); }
+  .verdict.fail{ color:var(--vermillion-deep); }
+  .review-list{ text-align:left; margin-top:16px; }
+  .review-item{ background:var(--paper2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:8px; }
+  .review-item .rq{ font-family:'Shippori Mincho',serif; font-size:15px; margin-bottom:6px; }
+  .review-item .ra{ font-size:12px; color:var(--ink-soft); }
+  .review-item .ra b{ color:var(--green); }
+  .restart-btn{ margin-top:20px; background:var(--indigo); color:#151412; border:none; border-radius:999px; padding:12px 30px; font-weight:700; font-size:13.5px; cursor:pointer; }
+
+  .hidden{ display:none !important; }
+
+  footer{ text-align:center; margin-top:26px; font-size:11.5px; color:var(--ink-soft); letter-spacing:0.03em; }
+
+  @media (prefers-reduced-motion: reduce){ .card.shake, .hanko.show, .miss-mark.show{ animation:none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title-block">
+      <h1>模擬試験</h1>
+      <p>Latihan Soal ala JLPT · TOKIKA</p>
+    </div>
+    <div class="toggle-row" id="levelRow">
+      <button id="levelN5" class="active">N5</button>
+      <button id="levelN4">N4</button>
+    </div>
+    <div class="toggle-row mode" id="modeRow">
+      <button id="modeFull" class="active">Kanji Penuh<span class="sub">tanpa bantuan bacaan</span></button>
+      <button id="modeFuri">Kanji + Furigana<span class="sub">ada bantuan bacaan</span></button>
+    </div>
+  </header>
+
+  <div class="rally" id="rally">
+    <div class="rally-stats">
+      <div class="stat"><span class="num" id="statCorrect">0</span><span class="lbl">Benar</span></div>
+      <div class="stat"><span class="num" id="statWrong">0</span><span class="lbl">Salah</span></div>
+      <div class="stat"><span class="num" id="statNum">1/50</span><span class="lbl">Soal</span></div>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="stage" style="margin-top:16px;">
+
+    <div class="start-panel" id="startPanel">
+      <p>Simulasi 50 soal ala JLPT untuk level yang kamu pilih di atas. Ada soal bacaan kanji, arti kosakata, dan tata bahasa. Pilih dulu mode kanji-nya, lalu mulai.</p>
+      <button class="start-btn" id="startBtn">Mulai Latihan</button>
+    </div>
+
+    <div id="quizArea" class="hidden">
+      <div class="card" id="card">
+        <div class="hanko" id="hanko">正解</div>
+        <div class="miss-mark" id="missMark">✕</div>
+        <div class="q-index"><span id="qIndex">1 / 50</span><span class="q-tag" id="qTag">Bacaan</span></div>
+        <div class="prompt" id="promptEl"></div>
+      </div>
+      <div class="options" id="options"></div>
+      <div class="next-row" id="nextRow"></div>
+    </div>
+
+    <div class="results hidden" id="resultsPanel">
+      <div class="score-label">SKOR KAMU</div>
+      <div class="score" id="finalScore">0/50</div>
+      <div class="verdict" id="verdictEl"></div>
+      <div class="review-list" id="reviewList"></div>
+      <button class="restart-btn" id="restartBtn">Ulangi Latihan</button>
+    </div>
+
+  </div>
+
+  <footer>50 soal per level · Soal diacak tiap kamu mulai ulang</footer>
+</div>
+
+<script>
+const EXAM = {"n5": [{"type": "reading", "prompt": ["番号"], "options": ["ちち", "ばんごう", "びょういん", "おとこのこ"], "answer": "ばんごう"}, {"type": "reading", "prompt": ["お茶"], "options": ["はし", "おちゃ", "あね", "えいがかん"], "answer": "おちゃ"}, {"type": "reading", "prompt": ["座る"], "options": ["すわる", "ことし", "おてあらい", "だい"], "answer": "すわる"}, {"type": "reading", "prompt": ["図書館"], "options": ["かみ", "からだ", "かす", "としょかん"], "answer": "としょかん"}, {"type": "reading", "prompt": ["椅子"], "options": ["ひこうき", "やすい", "いす", "いろ"], "answer": "いす"}, {"type": "reading", "prompt": ["曲がる"], "options": ["ながい", "はいる", "やすい", "まがる"], "answer": "まがる"}, {"type": "reading", "prompt": ["教える"], "options": ["いちばん", "まい", "おしえる", "つくる"], "answer": "おしえる"}, {"type": "reading", "prompt": ["鉛筆"], "options": ["いう", "へた", "えんぴつ", "かりる"], "answer": "えんぴつ"}, {"type": "reading", "prompt": ["学生"], "options": ["だいがく", "じてんしゃ", "がくせい", "しけん"], "answer": "がくせい"}, {"type": "reading", "prompt": ["歯"], "options": ["がいこくじん", "は", "びよういん", "ことし"], "answer": "は"}, {"type": "reading", "prompt": ["食べる"], "options": ["ばんごう", "じゅぎょう", "たべる", "いえ"], "answer": "たべる"}, {"type": "reading", "prompt": ["お姉さん"], "options": ["おてあらい", "たかい", "ほん", "おねえさん"], "answer": "おねえさん"}, {"type": "reading", "prompt": ["多い"], "options": ["おおい", "べんきょうする", "ほん", "にわ"], "answer": "おおい"}, {"type": "reading", "prompt": ["元気"], "options": ["べんり", "こうばん", "らいねん", "げんき"], "answer": "げんき"}, {"type": "reading", "prompt": ["高い"], "options": ["たかい", "まいしゅう", "たまご", "じてんしゃ"], "answer": "たかい"}, {"type": "reading", "prompt": ["手袋"], "options": ["てぶくろ", "のむ", "だいどころ", "さむい"], "answer": "てぶくろ"}, {"type": "reading", "prompt": ["寒い"], "options": ["さむい", "えんぴつ", "くつした", "まえ"], "answer": "さむい"}, {"type": "reading", "prompt": ["弟"], "options": ["じどうしゃ", "おとうと", "はし", "そと"], "answer": "おとうと"}, {"type": "reading", "prompt": ["部屋"], "options": ["へや", "たかい", "あし", "とり"], "answer": "へや"}, {"type": "reading", "prompt": ["机"], "options": ["つくえ", "おねえさん", "うみ", "ながい"], "answer": "つくえ"}, {"type": "meaning", "prompt": [{"k": "橋", "r": "はし"}], "options": ["jembatan", "meja", "mengetahui", "mahir"], "answer": "jembatan"}, {"type": "meaning", "prompt": [{"k": "暇", "r": "ひま"}], "options": ["hujan", "senggang / luang", "dingin (cuaca)", "putih"], "answer": "senggang / luang"}, {"type": "meaning", "prompt": [{"k": "自転車", "r": "じてんしゃ"}], "options": ["sepeda", "guru", "kakak laki-laki", "warna"], "answer": "sepeda"}, {"type": "meaning", "prompt": [{"k": "病院", "r": "びょういん"}], "options": ["rumah sakit", "ibu (org lain)", "kamar tidur", "orang asing"], "answer": "rumah sakit"}, {"type": "meaning", "prompt": [{"k": "家族", "r": "かぞく"}], "options": ["berapa orang", "pesawat terbang", "rambut", "keluarga"], "answer": "keluarga"}, {"type": "meaning", "prompt": [{"k": "お兄さん", "r": "おにいさん"}], "options": ["...lembar", "air", "kakak laki-laki (org lain)", "anak"], "answer": "kakak laki-laki (org lain)"}, {"type": "meaning", "prompt": [{"k": "大学", "r": "だいがく"}], "options": ["kursi", "senggang / luang", "ayah (sendiri)", "universitas"], "answer": "universitas"}, {"type": "meaning", "prompt": [{"k": "医者", "r": "いしゃ"}], "options": ["luar", "pos polisi", "dokter", "burung"], "answer": "dokter"}, {"type": "meaning", "prompt": [{"k": "右", "r": "みぎ"}], "options": ["hangat", "tenang", "ayah (org lain)", "kanan"], "answer": "kanan"}, {"type": "meaning", "prompt": [{"k": "来年", "r": "らいねん"}], "options": ["kamar tidur", "koran", "panas (cuaca)", "tahun depan"], "answer": "tahun depan"}, {"type": "meaning", "prompt": [{"k": "お母さん", "r": "おかあさん"}], "options": ["setengah", "bawah", "minggu depan", "ibu (org lain)"], "answer": "ibu (org lain)"}, {"type": "meaning", "prompt": [{"k": "美容院", "r": "びよういん"}], "options": ["salon kecantikan", "suka", "minggu depan", "sungai"], "answer": "salon kecantikan"}, {"type": "meaning", "prompt": [{"k": "便利", "r": "べんり"}], "options": ["melihat", "ujian", "praktis", "berbicara"], "answer": "praktis"}, {"type": "meaning", "prompt": [{"k": "大きい", "r": "おおきい"}], "options": ["besar", "kakak perempuan", "mematikan / menghapus", "menggunakan"], "answer": "besar"}, {"type": "meaning", "prompt": [{"k": "見る", "r": "みる"}], "options": ["jalan", "lama", "melihat", "murah"], "answer": "melihat"}, {"type": "grammar", "prompt": ["わたし", "___", {"k": "学生", "r": "がくせい"}, "です。"], "options": ["は", "が", "を", "に"], "answer": "は"}, {"type": "grammar", "prompt": [{"k": "猫", "r": "ねこ"}, "___", "います。"], "options": ["が", "を", "に", "で"], "answer": "が"}, {"type": "grammar", "prompt": [{"k": "水", "r": "みず"}, "___", {"k": "飲", "r": "の"}, "みます。"], "options": ["を", "に", "で", "の"], "answer": "を"}, {"type": "grammar", "prompt": [{"k": "三時", "r": "さんじ"}, "___", {"k": "行", "r": "い"}, "きます。"], "options": ["に", "で", "を", "は"], "answer": "に"}, {"type": "grammar", "prompt": [{"k": "図書館", "r": "としょかん"}, "___", {"k": "勉強", "r": "べんきょう"}, "します。"], "options": ["で", "に", "を", "が"], "answer": "で"}, {"type": "grammar", "prompt": ["これはわたし", "___", {"k": "本", "r": "ほん"}, "です。"], "options": ["の", "に", "を", "で"], "answer": "の"}, {"type": "grammar", "prompt": ["きのう、", {"k": "学校", "r": "がっこう"}, "へ", "___。"], "options": ["行きました", "行きます", "行きません", "行きませんでした"], "answer": "行きました"}, {"type": "grammar", "prompt": ["この", {"k": "家", "r": "いえ"}, "は", "___です。"], "options": ["大きい", "大きな", "大きさ", "大きく"], "answer": "大きい"}, {"type": "grammar", "prompt": ["___", {"k": "部屋", "r": "へや"}, "ですね。"], "options": ["静かな", "静かの", "静かい", "静かだ"], "answer": "静かな"}, {"type": "grammar", "prompt": ["わたしは", {"k": "日本", "r": "にほん"}, "に", "___です。"], "options": ["行きたい", "行きます", "行った", "行く"], "answer": "行きたい"}, {"type": "grammar", "prompt": ["ここに", "___", {"k": "下", "r": "くだ"}, "さい。"], "options": ["座って", "座り", "座る", "座った"], "answer": "座って"}, {"type": "grammar", "prompt": [{"k": "今", "r": "いま"}, "、", {"k": "勉強", "r": "べんきょう"}, "___", "います。"], "options": ["して", "します", "した", "しない"], "answer": "して"}, {"type": "grammar", "prompt": ["これは", "___", "ですか。"], "options": ["いくら", "いつ", "どこ", "だれ"], "answer": "いくら"}, {"type": "grammar", "prompt": ["あの", {"k": "人", "r": "ひと"}, "は", "___", "ですか。"], "options": ["だれ", "なに", "どこ", "いつ"], "answer": "だれ"}, {"type": "grammar", "prompt": [{"k": "母", "r": "はは"}, "は", {"k": "毎朝", "r": "まいあさ"}, {"k": "六時", "r": "ろくじ"}, "___", {"k": "起", "r": "お"}, "きます。"], "options": ["に", "で", "を", "へ"], "answer": "に"}], "n4": [{"type": "reading", "prompt": ["減らす"], "options": ["たとえば", "とおる", "かんたん", "へらす"], "answer": "へらす"}, {"type": "reading", "prompt": ["娘"], "options": ["えらぶ", "しまる", "むすめ", "はじまる"], "answer": "むすめ"}, {"type": "reading", "prompt": ["夕べ"], "options": ["そうじき", "しょうたいする", "つづく", "ゆうべ"], "answer": "ゆうべ"}, {"type": "reading", "prompt": ["謝る"], "options": ["あやまる", "よごれる", "まいばん", "いたい"], "answer": "あやまる"}, {"type": "reading", "prompt": ["汗"], "options": ["あせ", "かぎ", "やせる", "そだてる"], "answer": "あせ"}, {"type": "reading", "prompt": ["鶏肉"], "options": ["まねく", "こうじょう", "とりにく", "とうふ"], "answer": "とりにく"}, {"type": "reading", "prompt": ["平均"], "options": ["じむしょ", "ぜんぶ", "へいきん", "とまる"], "answer": "へいきん"}, {"type": "reading", "prompt": ["似る"], "options": ["かよう", "けっせきする", "にる", "ねつ"], "answer": "にる"}, {"type": "reading", "prompt": ["特別"], "options": ["とくべつ", "なみだ", "いたい", "せんたくき"], "answer": "とくべつ"}, {"type": "reading", "prompt": ["太い"], "options": ["おくさん", "とけい", "うけつけ", "ふとい"], "answer": "ふとい"}, {"type": "reading", "prompt": ["熱"], "options": ["ひっこす", "ねつ", "やっきょく", "あんしんする"], "answer": "ねつ"}, {"type": "reading", "prompt": ["危ない"], "options": ["よごれる", "しょうかいする", "あぶない", "てんいん"], "answer": "あぶない"}, {"type": "reading", "prompt": ["最初"], "options": ["さいしょ", "まど", "あんしんする", "ふつう"], "answer": "さいしょ"}, {"type": "reading", "prompt": ["氷"], "options": ["こおり", "たいふう", "しんぱいする", "たつ"], "answer": "こおり"}, {"type": "reading", "prompt": ["変える"], "options": ["きいろ", "かしこい", "ふくざつ", "かえる"], "answer": "かえる"}, {"type": "reading", "prompt": ["集まる"], "options": ["ただしい", "しゅっせきする", "あつまる", "あく"], "answer": "あつまる"}, {"type": "reading", "prompt": ["比べる"], "options": ["よごす", "くらべる", "とりにく", "かえる"], "answer": "くらべる"}, {"type": "reading", "prompt": ["島"], "options": ["むすめ", "しょうたいする", "しま", "いっしょう"], "answer": "しま"}, {"type": "reading", "prompt": ["紹介する"], "options": ["ちゃいろ", "あげる", "しょうかいする", "さげる"], "answer": "しょうかいする"}, {"type": "reading", "prompt": ["久しぶり"], "options": ["ひさしぶり", "さんかする", "えんぴつ", "だいじ"], "answer": "ひさしぶり"}, {"type": "meaning", "prompt": [{"k": "始める", "r": "はじめる"}], "options": ["memulai", "mengumpulkan", "mengirim", "abu-abu"], "answer": "memulai"}, {"type": "meaning", "prompt": [{"k": "紫", "r": "むらさき"}], "options": ["bertanya", "museum", "ungu", "arah / pihak"], "answer": "ungu"}, {"type": "meaning", "prompt": [{"k": "参加する", "r": "さんかする"}], "options": ["berpartisipasi", "sampai / terkirim", "bertambah", "tempat parkir"], "answer": "berpartisipasi"}, {"type": "meaning", "prompt": [{"k": "楽しい", "r": "たのしい"}], "options": ["menyenangkan", "melanjutkan", "tebal", "rumit"], "answer": "menyenangkan"}, {"type": "meaning", "prompt": [{"k": "説明する", "r": "せつめいする"}], "options": ["abu-abu", "meminta maaf", "menjelaskan", "kantor"], "answer": "menjelaskan"}, {"type": "meaning", "prompt": [{"k": "頼る", "r": "たよる"}], "options": ["muda", "bergantung", "merusak", "lahan kosong"], "answer": "bergantung"}, {"type": "meaning", "prompt": [{"k": "案内する", "r": "あんないする"}], "options": ["memandu", "jalan raya", "suami (sopan)", "tertutup"], "answer": "memandu"}, {"type": "meaning", "prompt": [{"k": "建つ", "r": "たつ"}], "options": ["berdiri (bangunan)", "istri orang (sopan)", "mengantarkan", "pahit"], "answer": "berdiri (bangunan)"}, {"type": "meaning", "prompt": [{"k": "息子", "r": "むすこ"}], "options": ["masa lalu", "anak laki-laki", "gula", "matahari"], "answer": "anak laki-laki"}, {"type": "meaning", "prompt": [{"k": "財布", "r": "さいふ"}], "options": ["garam", "tangga", "bulan depan", "dompet"], "answer": "dompet"}, {"type": "meaning", "prompt": [{"k": "奥さん", "r": "おくさん"}], "options": ["sebenarnya", "pintu keluar", "istri orang (sopan)", "masa depan"], "answer": "istri orang (sopan)"}, {"type": "meaning", "prompt": [{"k": "忙しい", "r": "いそがしい"}], "options": ["basah", "sibuk", "membangun", "kosmetik"], "answer": "sibuk"}, {"type": "meaning", "prompt": [{"k": "離婚する", "r": "りこんする"}], "options": ["istimewa", "atap gedung", "bercerai", "lembut"], "answer": "bercerai"}, {"type": "meaning", "prompt": [{"k": "赤ちゃん", "r": "あかちゃん"}], "options": ["bayi", "kurang dari", "terakhir", "ramai"], "answer": "bayi"}, {"type": "meaning", "prompt": [{"k": "豚肉", "r": "ぶたにく"}], "options": ["hijau", "absen", "menjaga", "daging babi"], "answer": "daging babi"}, {"type": "grammar", "prompt": [{"k": "雨", "r": "あめ"}, "が", "___", {"k": "急", "r": "いそ"}, "いで", {"k": "帰", "r": "かえ"}, "りました。"], "options": ["降ったので", "降ったのに", "降っても", "降りながら"], "answer": "降ったので"}, {"type": "grammar", "prompt": [{"k": "日本", "r": "にほん"}, "に", "___", "ことがあります。"], "options": ["行った", "行く", "行って", "行き"], "answer": "行った"}, {"type": "grammar", "prompt": [{"k": "音楽", "r": "おんがく"}, "を", "___", "、", {"k": "勉強", "r": "べんきょう"}, "します。"], "options": ["聞きながら", "聞くと", "聞いても", "聞いたり"], "answer": "聞きながら"}, {"type": "grammar", "prompt": ["もし", {"k": "時間", "r": "じかん"}, "が", "___", "、", {"k": "行", "r": "い"}, "きます。"], "options": ["あれば", "あるなら", "あっても", "あるので"], "answer": "あれば"}, {"type": "grammar", "prompt": ["この", {"k": "料理", "r": "りょうり"}, "は", "___", {"k": "見", "r": "み"}, "えます。"], "options": ["おいしそうに", "おいしいそうに", "おいしそうな", "おいしいように"], "answer": "おいしそうに"}, {"type": "grammar", "prompt": [{"k": "値段", "r": "ねだん"}, "は", {"k": "去年", "r": "きょねん"}, "___", {"k": "高", "r": "たか"}, "くなりました。"], "options": ["より", "ほど", "でも", "しか"], "answer": "より"}, {"type": "grammar", "prompt": [{"k": "彼", "r": "かれ"}, "は", "たぶん", {"k": "来", "r": "く"}, "る", "___。"], "options": ["でしょう", "ようです", "そうです", "らしいです"], "answer": "でしょう"}, {"type": "grammar", "prompt": [{"k": "会議", "r": "かいぎ"}, "の", {"k": "前", "r": "まえ"}, "に", {"k": "資料", "r": "しりょう"}, "を", "___", "おきます。"], "options": ["準備して", "準備し", "準備する", "準備した"], "answer": "準備して"}, {"type": "grammar", "prompt": ["この", {"k": "問題", "r": "もんだい"}, "は", "___", {"k": "難", "r": "むずか"}, "しいです。"], "options": ["とても", "あまり", "ぜんぜん", "たぶん"], "answer": "とても"}, {"type": "grammar", "prompt": [{"k": "忙", "r": "いそが"}, "しくても", "、", {"k": "毎日", "r": "まいにち"}, {"k": "運動", "r": "うんどう"}, "___", "います。"], "options": ["して", "します", "した", "しないで"], "answer": "して"}, {"type": "grammar", "prompt": [{"k": "説明", "r": "せつめい"}, "を", "___", "、", "まだ", "わかりません。"], "options": ["聞いたのに", "聞いたので", "聞いたら", "聞くと"], "answer": "聞いたのに"}, {"type": "grammar", "prompt": ["この", {"k": "計画", "r": "けいかく"}, "は", "もっと", "___", {"k": "必要", "r": "ひつよう"}, "が", "あります。"], "options": ["検討する", "検討した", "検討して", "検討し"], "answer": "検討する"}, {"type": "grammar", "prompt": [{"k": "彼女", "r": "かのじょ"}, "は", {"k": "日本語", "r": "にほんご"}, "が", "___", {"k": "上手", "r": "じょうず"}, "に", "なりました。"], "options": ["だんだん", "ずっと", "もっと", "すぐ"], "answer": "だんだん"}, {"type": "grammar", "prompt": ["この", {"k": "荷物", "r": "にもつ"}, "を", "___", "もらえますか。"], "options": ["運んで", "運んだ", "運ぶ", "運び"], "answer": "運んで"}, {"type": "grammar", "prompt": [{"k": "約束", "r": "やくそく"}, "の", {"k": "時間", "r": "じかん"}, "に", "___", "、", {"k": "連絡", "r": "れんらく"}, "して", "ください。"], "options": ["遅れる場合は", "遅れるのに", "遅れるように", "遅れるだけ"], "answer": "遅れる場合は"}]};
+
+
+let level = "n5";
+let mode = "full"; // full | furigana
+let deck = [];
+let qPos = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let wrongLog = [];
+let answered = false;
+
+const els = {
+  levelN5: document.getElementById("levelN5"),
+  levelN4: document.getElementById("levelN4"),
+  modeFull: document.getElementById("modeFull"),
+  modeFuri: document.getElementById("modeFuri"),
+  startPanel: document.getElementById("startPanel"),
+  startBtn: document.getElementById("startBtn"),
+  quizArea: document.getElementById("quizArea"),
+  resultsPanel: document.getElementById("resultsPanel"),
+  card: document.getElementById("card"),
+  hanko: document.getElementById("hanko"),
+  missMark: document.getElementById("missMark"),
+  qIndex: document.getElementById("qIndex"),
+  qTag: document.getElementById("qTag"),
+  promptEl: document.getElementById("promptEl"),
+  options: document.getElementById("options"),
+  nextRow: document.getElementById("nextRow"),
+  statCorrect: document.getElementById("statCorrect"),
+  statWrong: document.getElementById("statWrong"),
+  statNum: document.getElementById("statNum"),
+  progressFill: document.getElementById("progressFill"),
+  finalScore: document.getElementById("finalScore"),
+  verdictEl: document.getElementById("verdictEl"),
+  reviewList: document.getElementById("reviewList"),
+  restartBtn: document.getElementById("restartBtn"),
+};
+
+const TAG_LABEL = { reading: "Bacaan", meaning: "Arti", grammar: "Tata Bahasa" };
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+  return a;
+}
+
+function escapeHtml(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function renderPrompt(segments){
+  let html = "";
+  segments.forEach(seg=>{
+    if(typeof seg === "string"){
+      if(seg === "___"){
+        html += '<span class="blank">＿＿＿</span>';
+      } else {
+        html += escapeHtml(seg);
+      }
+    } else {
+      if(mode === "furigana"){
+        html += `<ruby>${seg.k}<rt>${seg.r}</rt></ruby>`;
+      } else {
+        html += seg.k;
+      }
+    }
+  });
+  return html;
+}
+
+function plainPrompt(segments){
+  return segments.map(seg => typeof seg === "string" ? seg : seg.k).join("");
+}
+
+function startExam(){
+  deck = shuffle(EXAM[level]).slice(0, 50);
+  qPos = 0; correctCount = 0; wrongCount = 0; wrongLog = [];
+  els.startPanel.classList.add("hidden");
+  els.resultsPanel.classList.add("hidden");
+  els.quizArea.classList.remove("hidden");
+  renderStats();
+  buildQuestion();
+}
+
+function renderStats(){
+  els.statCorrect.textContent = correctCount;
+  els.statWrong.textContent = wrongCount;
+  els.statNum.textContent = (qPos+1) + "/" + deck.length;
+  els.progressFill.style.width = Math.round((qPos/deck.length)*100) + "%";
+}
+
+function buildQuestion(){
+  answered = false;
+  els.hanko.classList.remove("show");
+  els.missMark.classList.remove("show");
+  els.card.classList.remove("shake");
+  els.nextRow.innerHTML = "";
+
+  const q = deck[qPos];
+  els.qIndex.textContent = (qPos+1) + " / " + deck.length;
+  els.qTag.textContent = TAG_LABEL[q.type] || "Soal";
+  els.promptEl.innerHTML = renderPrompt(q.prompt);
+
+  els.options.innerHTML = "";
+  const opts = shuffle(q.options);
+  opts.forEach(optText=>{
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.textContent = optText;
+    btn.addEventListener("click", ()=> handleAnswer(btn, optText, q));
+    els.options.appendChild(btn);
+  });
+
+  renderStats();
+}
+
+function handleAnswer(btn, text, q){
+  if(answered) return;
+  answered = true;
+  const isCorrect = text === q.answer;
+
+  [...els.options.children].forEach(b=>{
+    b.disabled = true;
+    if(b.textContent === q.answer) b.classList.add("correct");
+    else if(b === btn) b.classList.add("wrong");
+    else b.classList.add("dim");
+  });
+
+  if(isCorrect){
+    correctCount++;
+    els.hanko.classList.add("show");
+  } else {
+    wrongCount++;
+    els.missMark.classList.add("show");
+    els.card.classList.add("shake");
+    wrongLog.push({ prompt: plainPrompt(q.prompt), answer: q.answer, given: text });
+  }
+  renderStats();
+
+  const next = document.createElement("button");
+  next.className = "next-btn";
+  const isLast = qPos >= deck.length - 1;
+  next.textContent = isLast ? "Lihat Hasil" : "Lanjut →";
+  next.addEventListener("click", ()=>{
+    if(isLast){ showResults(); }
+    else { qPos++; buildQuestion(); }
+  });
+  els.nextRow.appendChild(next);
+}
+
+function showResults(){
+  els.quizArea.classList.add("hidden");
+  els.resultsPanel.classList.remove("hidden");
+  els.finalScore.textContent = correctCount + "/" + deck.length;
+  const pct = Math.round((correctCount/deck.length)*100);
+  if(pct >= 60){
+    els.verdictEl.textContent = "Mantap, di atas ambang lulus (60%)!";
+    els.verdictEl.className = "verdict pass";
+  } else {
+    els.verdictEl.textContent = "Belum lewat ambang 60% — coba lagi, kamu pasti bisa.";
+    els.verdictEl.className = "verdict fail";
+  }
+  els.reviewList.innerHTML = "";
+  if(wrongLog.length){
+    const heading = document.createElement("div");
+    heading.style.cssText = "font-size:12px;color:var(--ink-soft);margin:16px 0 8px;text-transform:uppercase;letter-spacing:0.05em;";
+    heading.textContent = "Soal yang perlu diulang";
+    els.reviewList.appendChild(heading);
+    wrongLog.forEach(w=>{
+      const item = document.createElement("div");
+      item.className = "review-item";
+      item.innerHTML = `<div class="rq">${escapeHtml(w.prompt.replace('___','＿＿＿'))}</div><div class="ra">Jawaban benar: <b>${escapeHtml(w.answer)}</b> &nbsp;·&nbsp; Jawabanmu: ${escapeHtml(w.given)}</div>`;
+      els.reviewList.appendChild(item);
+    });
+  }
+}
+
+els.levelN5.addEventListener("click", ()=>{
+  level = "n5"; els.levelN5.classList.add("active"); els.levelN4.classList.remove("active");
+  els.startPanel.classList.remove("hidden"); els.quizArea.classList.add("hidden"); els.resultsPanel.classList.add("hidden");
+});
+els.levelN4.addEventListener("click", ()=>{
+  level = "n4"; els.levelN4.classList.add("active"); els.levelN5.classList.remove("active");
+  els.startPanel.classList.remove("hidden"); els.quizArea.classList.add("hidden"); els.resultsPanel.classList.add("hidden");
+});
+els.modeFull.addEventListener("click", ()=>{
+  mode = "full"; els.modeFull.classList.add("active"); els.modeFuri.classList.remove("active");
+  if(!els.quizArea.classList.contains("hidden")) buildQuestion();
+});
+els.modeFuri.addEventListener("click", ()=>{
+  mode = "furigana"; els.modeFuri.classList.add("active"); els.modeFull.classList.remove("active");
+  if(!els.quizArea.classList.contains("hidden")) buildQuestion();
+});
+els.startBtn.addEventListener("click", startExam);
+els.restartBtn.addEventListener("click", ()=>{
+  els.resultsPanel.classList.add("hidden");
+  els.startPanel.classList.remove("hidden");
+});
+</script>
+</body>
+</html>

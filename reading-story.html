@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Membaca Hiragana &amp; Katakana — TOKIKA</title>
+<meta name="description" content="Latihan membaca cerita pendek yang mencakup semua huruf hiragana dan katakana, lengkap dengan romaji dan terjemahan Indonesia.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#191B1D; --paper2:#212426; --card:#1F2224;
+    --ink:#E9E7E2; --ink-soft:#8D9296;
+    --indigo:#7C9CC4; --indigo-deep:#A9C2E0;
+    --vermillion:#E0644A; --vermillion-deep:#F0906F;
+    --line:#33383B; --green:#7FBF93; --green-bg:#22322A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0; width:100%; overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% -8%, rgba(224,100,74,0.09), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 100% 110%, rgba(124,156,196,0.08), transparent 60%),
+      var(--paper);
+    background-attachment:fixed; color:var(--ink); font-family:'Zen Kaku Gothic New', sans-serif;
+    min-height:100vh; display:flex; justify-content:center; padding:28px 20px 60px;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:0.5;
+    background-image:repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+  }
+  .wrap{ width:100%; max-width:600px; position:relative; }
+  header{ margin-bottom:14px; }
+  .title-block h1{ font-family:'Shippori Mincho', serif; font-weight:800; font-size:clamp(24px,6vw,32px); margin:0 0 2px; color:var(--indigo-deep); letter-spacing:0.02em; }
+  .title-block p{ margin:0; font-size:13px; color:var(--ink-soft); letter-spacing:0.03em; }
+
+  .toggle-row{ display:flex; background:var(--paper2); border:1px solid var(--line); border-radius:14px; padding:4px; gap:4px; margin-top:12px; }
+  .toggle-row button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:10px; font-family:'Zen Kaku Gothic New', sans-serif; font-size:13px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:all .18s ease; text-align:center; }
+  .toggle-row button.active{ background:var(--vermillion); color:#191B1D; box-shadow:0 2px 10px rgba(0,0,0,0.4); }
+
+  .switch-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .switch-chip{ border:1px solid var(--line); background:var(--paper2); color:var(--ink-soft); font-family:'Zen Kaku Gothic New',sans-serif; font-size:12px; font-weight:700; padding:8px 14px; border-radius:999px; cursor:pointer; transition:all .15s ease; }
+  .switch-chip.active{ background:var(--indigo); border-color:var(--indigo); color:#191B1D; }
+
+  .coverage-note{ font-size:11px; color:var(--ink-soft); background:var(--card); border:1px solid var(--line); border-radius:10px; padding:8px 12px; margin-top:12px; line-height:1.5; }
+
+  .story{ margin-top:16px; display:flex; flex-direction:column; gap:10px; }
+  .sentence-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
+  .sentence-jp{ font-family:'Shippori Mincho', serif; font-size:18px; line-height:1.9; color:var(--ink); }
+  .sentence-romaji{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--indigo-deep); margin-top:8px; display:none; }
+  .sentence-id{ font-size:12.5px; color:var(--ink-soft); margin-top:6px; font-style:italic; display:none; }
+  .show-romaji .sentence-romaji{ display:block; }
+  .show-id .sentence-id{ display:block; }
+
+  footer{ text-align:center; margin-top:26px; font-size:11.5px; color:var(--ink-soft); letter-spacing:0.03em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title-block">
+      <h1>読み物</h1>
+      <p>Latihan Membaca · Hiragana &amp; Katakana</p>
+    </div>
+    <div class="toggle-row" id="storyToggle">
+      <button id="btnHira" class="active">Cerita Hiragana</button>
+      <button id="btnKata">Cerita Katakana</button>
+    </div>
+    <div class="switch-row">
+      <button class="switch-chip" id="chipRomaji">Tampilkan Romaji</button>
+      <button class="switch-chip" id="chipId">Tampilkan Terjemahan</button>
+    </div>
+    <div class="coverage-note" id="coverageNote"></div>
+  </header>
+
+  <div class="story" id="storyArea"></div>
+
+  <footer id="footNote">Cerita ditulis original oleh TOKIKA untuk latihan membaca</footer>
+</div>
+
+<script>
+const STORIES = {"hiragana": [["けさ、はやくおきました。", "Kesa, hayaku okimashita.", "Pagi ini, aku bangun pagi-pagi."], ["つめたいかぜがふいていて、まどからそらをみると、あめがふっていました。", "Tsumetai kaze ga fuiteite, mado kara sora wo miru to, ame ga futteimashita.", "Angin dingin bertiup, dan waktu aku lihat langit dari jendela, ternyata hujan."], ["でも、すぐにあめがやみました。", "Demo, sugu ni ame ga yamimashita.", "Tapi, hujannya cepat berhenti."], ["かさをもって、がっこうへいきました。", "Kasa wo motte, gakkou e ikimashita.", "Aku bawa payung, lalu pergi ke sekolah."], ["がっこうでともだちにあいました。", "Gakkou de tomodachi ni aimashita.", "Di sekolah aku ketemu teman."], ["ともだちのかみのけはちぢれていて、とてもかわいいです。", "Tomodachi no kami no ke wa chijireteite, totemo kawaii desu.", "Rambut temanku keriting, imut banget."], ["「おはよう。げんき」といいました。", "\"Ohayou. Genki?\" to iimashita.", "\"Pagi. Sehat?\" kataku."], ["ともだちはにっこりわらって、「げんきだよ、ありがとう」とこたえました。", "Tomodachi wa nikkori waratte, \"genki da yo, arigatou\" to kotaemashita.", "Temanku tersenyum dan jawab, \"sehat, makasih.\""], ["きょうしつでべんきょうしました。", "Kyoushitsu de benkyou shimashita.", "Aku belajar di kelas."], ["べんきょうはひるまでつづきました。", "Benkyou wa hiru made tsuzukimashita.", "Belajarnya berlanjut sampai siang."], ["せんせいはやさしくて、みんなにわかりやすくおしえてくれました。", "Sensei wa yasashikute, minna ni wakariyasuku oshiete kuremashita.", "Gurunya baik, ngajarin semua orang dengan cara yang gampang dimengerti."], ["ひるやすみに、おべんとうをたべました。", "Hiruyasumi ni, obentou wo tabemashita.", "Waktu istirahat siang, aku makan bekal."], ["たまごやきとおにぎりがとてもおいしかったです。", "Tamagoyaki to onigiri ga totemo oishikatta desu.", "Telur gulung dan onigiri-nya enak banget."], ["ごごはとしょかんへいって、ざっしとほんをよみました。", "Gogo wa toshokan e itte, zasshi to hon wo yomimashita.", "Sore harinya aku ke perpustakaan, baca majalah dan buku."], ["むずかしいかんじもありましたが、すこしずつわかるようになりました。", "Muzukashii kanji mo arimashita ga, sukoshizutsu wakaru you ni narimashita.", "Ada kanji yang susah juga, tapi pelan-pelan aku mulai ngerti."], ["がっこうがおわると、こうえんへさんぽにいきました。", "Gakkou ga owaru to, kouen e sanpo ni ikimashita.", "Setelah sekolah selesai, aku jalan-jalan ke taman."], ["こうえんはひとでいっぱいでした。", "Kouen wa hito de ippai deshita.", "Tamannya penuh orang."], ["いぬをつれたひとや、ぼうしをかぶったこどもがいました。", "Inu wo tsureta hito ya, boushi wo kabutta kodomo ga imashita.", "Ada orang yang bawa anjing, ada juga anak yang pakai topi."], ["ぶらんこにのって、とてもたのしいあそびでした。", "Buranko ni notte, totemo tanoshii asobi deshita.", "Naik ayunan, main yang seru banget."], ["えんぴつでにっきをかいてから、でんしゃのきっぷをかって、いえにかえりました。", "Enpitsu de nikki wo kaite kara, densha no kippu wo katte, ie ni kaerimashita.", "Setelah nulis diary pakai pensil, aku beli tiket kereta, terus pulang ke rumah."], ["おなかがぺこぺこになりました。", "Onaka ga pekopeko ni narimashita.", "Perutku jadi lapar banget."], ["いえでは、おかあさんとかぞくがばんごはんをつくっていました。", "Ie de wa, okaasan to kazoku ga bangohan wo tsukutteimashita.", "Di rumah, ibu dan keluarga lagi masak makan malam."], ["「ただいま」というと、「おかえりなさい」とこえがしました。", "\"Tadaima\" to iu to, \"okaerinasai\" to koe ga shimashita.", "Waktu aku bilang \"aku pulang\", terdengar suara \"selamat datang kembali\"."], ["おふろにはいって、あたたかいおゆでつかれをとりました。", "Ofuro ni haitte, atatakai oyu de tsukare wo torimashita.", "Aku mandi, hilangin capek pakai air hangat."], ["よるははやくねました。", "Yoru wa hayaku nemashita.", "Malamnya aku tidur cepat."], ["あしたもげんきにすごしたいです。", "Ashita mo genki ni sugoshitai desu.", "Besok juga aku mau ngejalanin hari dengan semangat."]], "katakana": [["アメリカから、トムさんがニホンにきました。", "Amerika kara, Tomu-san ga Nihon ni kimashita.", "Dari Amerika, Tom datang ke Jepang."], ["トムさんはロサンゼルスからのゲストです。", "Tomu-san wa Rosanzerusu kara no gesuto desu.", "Tom adalah tamu dari Los Angeles."], ["エレベーターでへやにいって、まずオレンジジュースをのみました。", "Erebeetaa de heya ni itte, mazu orenji juusu wo nomimashita.", "Naik lift ke kamar, dia minum jus jeruk duluan."], ["へやのつくえには、ペンとノートとピアノのミニチュアがありました。", "Heya no tsukue ni wa, pen to nooto to piano no minichua ga arimashita.", "Di meja kamar ada pena, notebook, dan miniatur piano."], ["はじめに、ホテルのロビーでチェックインしました。", "Hajime ni, hoteru no robii de chekkuin shimashita.", "Pertama, dia check-in di lobi hotel."], ["ソファはとてもキレイでした。", "Sofa wa totemo kirei deshita.", "Sofanya cantik banget."], ["つぎに、カフェでコーヒーとサンドイッチをちゅうもんしました。", "Tsugi ni, kafe de koohii to sandoicchi wo chuumon shimashita.", "Selanjutnya, dia pesan kopi dan sandwich di kafe."], ["ウェイターはとてもシンセツでした。", "Weitaa wa totemo shinsetsu deshita.", "Pelayannya baik banget."], ["デザートに、チョコレートケーキとアイスクリーム、それからバナナとマンゴーもたべました。", "Dezaato ni, chokoreeto keeki to aisukuriimu, sorekara banana to mangoo mo tabemashita.", "Buat dessert, dia makan kue coklat, es krim, terus pisang dan mangga juga."], ["ごごは、デパートへショッピングにいきました。", "Gogo wa, depaato e shoppingu ni ikimashita.", "Sore harinya, dia belanja ke department store."], ["シャツとネクタイ、スニーカーとタイヤつきのスーツケースをかいました。", "Shatsu to nekutai, suniikaa to taiya-tsuki no suutsukeesu wo kaimashita.", "Dia beli kemeja, dasi, sepatu sneaker, dan koper roda."], ["となりのミセには、ブランドもののバッグとベッドカバーがうっていました。", "Tonari no mise ni wa, burando mono no baggu to beddo kabaa ga utteimashita.", "Di toko sebelah, dijual tas branded dan sarung kasur."], ["レジで、クレジットカードをつかいました。", "Reji de, kurejitto kaado wo tsukaimashita.", "Di kasir, dia pakai kartu kredit."], ["それから、ゲームセンターでピンポンとボールゲームをしました。", "Sorekara, geemu sentaa de pinpon to booru geemu wo shimashita.", "Setelah itu, dia main ping-pong dan game bola di arcade."], ["ホテルのプールでおよいでから、ヘッドホンでユーモアのあるラジオをききました。", "Hoteru no puuru de oyoide kara, heddohon de yuumoa no aru rajio wo kikimashita.", "Setelah berenang di kolam hotel, dia dengerin radio lucu pakai headphone."], ["よるは、レストランでピザとパスタ、ハンバーガーとヌードルをたべました。", "Yoru wa, resutoran de piza to pasuta, hanbaagaa to nuudoru wo tabemashita.", "Malamnya, dia makan pizza, pasta, burger, dan mie di restoran."], ["バターとチーズのあじがとてもよかったです。", "Bataa to chiizu no aji ga totemo yokatta desu.", "Rasa mentega dan kejunya enak banget."], ["デザートにヨーグルトとワインもたのしみました。", "Dezaato ni yooguruto to wain mo tanoshimimashita.", "Buat dessert, dia juga menikmati yogurt dan wine."], ["ふるいかんばんに「ジュースヲノム」とかいてあって、トムさんはガイドブックのマンガとおなじだとわらいました。", "Furui kanban ni \"juusu wo nomu\" to kaite atte, Tomu-san wa gaidobukku no manga to onaji da to waraimashita.", "Ada papan tanda tua bertuliskan \"minum jus\" gaya kuno, Tom ketawa karena mirip komik di buku panduannya."], ["ちかくのリゾートホテルもガレージつきでステキでした。", "Chikaku no rizooto hoteru mo gareeji-tsuki de suteki deshita.", "Hotel resort di dekatnya juga punya garasi dan bagus banget."], ["ホテルのロビーでは、ギターのダンスミュージックがながれていました。", "Hoteru no robii de wa, gitaa no dansu myuujikku ga nagareteimashita.", "Di lobi hotel, mengalun musik dansa gitar."], ["さいごに、タクシーでホテルにもどりました。", "Saigo ni, takushii de hoteru ni modorimashita.", "Terakhir, dia naik taksi kembali ke hotel."], ["テレビをみてから、ぐっすりねました。", "Terebi wo mite kara, gussuri nemashita.", "Setelah nonton TV, dia tidur nyenyak."]]};
+
+let activeStory = "hiragana";
+let showRomaji = false;
+let showId = false;
+
+const els = {
+  btnHira: document.getElementById("btnHira"),
+  btnKata: document.getElementById("btnKata"),
+  chipRomaji: document.getElementById("chipRomaji"),
+  chipId: document.getElementById("chipId"),
+  storyArea: document.getElementById("storyArea"),
+  coverageNote: document.getElementById("coverageNote"),
+};
+
+const COVERAGE_TEXT = {
+  hiragana: "Cerita ini mencakup ke-71 huruf hiragana dasar (gojuon, dakuten, dan handakuten) secara lengkap.",
+  katakana: "Cerita ini mencakup hampir semua huruf katakana dasar. Dua huruf, \u30c2 (di) dan \u30c5 (du), sengaja tidak dipaksakan masuk karena nyaris tidak pernah dipakai di kosakata serapan asli \u2014 memaksakannya hanya akan membuat kalimat terdengar aneh."
+};
+
+function renderStory(){
+  els.storyArea.className = "story" + (showRomaji ? " show-romaji" : "") + (showId ? " show-id" : "");
+  els.storyArea.innerHTML = "";
+  const data = STORIES[activeStory];
+  data.forEach(([jp, romaji, id])=>{
+    const card = document.createElement("div");
+    card.className = "sentence-card";
+    card.innerHTML =
+      '<div class="sentence-jp">' + jp + '</div>' +
+      '<div class="sentence-romaji">' + romaji + '</div>' +
+      '<div class="sentence-id">' + id + '</div>';
+    els.storyArea.appendChild(card);
+  });
+  els.coverageNote.textContent = COVERAGE_TEXT[activeStory];
+}
+
+els.btnHira.addEventListener("click", ()=>{
+  activeStory = "hiragana";
+  els.btnHira.classList.add("active"); els.btnKata.classList.remove("active");
+  renderStory();
+});
+els.btnKata.addEventListener("click", ()=>{
+  activeStory = "katakana";
+  els.btnKata.classList.add("active"); els.btnHira.classList.remove("active");
+  renderStory();
+});
+els.chipRomaji.addEventListener("click", ()=>{
+  showRomaji = !showRomaji;
+  els.chipRomaji.classList.toggle("active", showRomaji);
+  renderStory();
+});
+els.chipId.addEventListener("click", ()=>{
+  showId = !showId;
+  els.chipId.classList.toggle("active", showId);
+  renderStory();
+});
+
+renderStory();
+
+</script>
+</body>
+</html>
