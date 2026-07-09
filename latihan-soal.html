@@ -42,6 +42,18 @@
   .toggle-row button.active{ background:var(--indigo); color:#151412; box-shadow:0 2px 10px rgba(0,0,0,0.4); }
   .toggle-row.mode button.active{ background:var(--vermillion); }
 
+  .srs-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .srs-switch{ flex:1; margin-top:10px; }
+  .srs-help{ flex-shrink:0; margin-top:10px; width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:var(--paper2); color:var(--ink-soft); font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; cursor:pointer; padding:0; }
+  .srs-modal-overlay{ position:fixed; inset:0; background:rgba(10,9,8,0.72); z-index:9999; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .srs-modal-overlay.hidden{ display:none; }
+  .srs-modal{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:26px 22px; max-width:360px; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+  .srs-modal h3{ font-family:'Shippori Mincho',serif; font-size:19px; color:var(--indigo-deep); margin:0 0 12px; }
+  .srs-modal p{ font-size:13px; line-height:1.65; color:var(--ink); margin:0 0 10px; }
+  .srs-modal .tag{ display:inline-block; background:var(--green-bg); color:var(--green); font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; margin-bottom:4px; }
+  .srs-modal button{ margin-top:12px; width:100%; background:var(--vermillion); color:#151412; border:none; border-radius:999px; padding:11px 0; font-weight:700; font-size:13.5px; cursor:pointer; }
+  .finish-btn{ margin-top:14px; background:transparent; border:1px solid var(--line); color:var(--ink-soft); border-radius:999px; padding:10px 22px; font-size:12.5px; font-weight:700; cursor:pointer; display:block; margin-left:auto; margin-right:auto; }
+
   .rally{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin:16px 0; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
   .rally-stats{ display:flex; gap:18px; }
   .stat{ display:flex; flex-direction:column; }
@@ -122,7 +134,26 @@
       <button id="modeFull" class="active">Kanji Penuh<span class="sub">tanpa bantuan bacaan</span></button>
       <button id="modeFuri">Kanji + Furigana<span class="sub">ada bantuan bacaan</span></button>
     </div>
+    <div class="srs-top">
+      <div class="toggle-row srs-switch" id="examModeRow" style="margin-top:10px;">
+        <button id="btnModeExam" class="active">Ujian</button>
+        <button id="btnModeSrs">SRS</button>
+      </div>
+      <button class="srs-help" id="srsHelp" type="button">?</button>
+    </div>
   </header>
+
+  <div class="srs-modal-overlay hidden" id="srsModal">
+    <div class="srs-modal">
+      <span class="tag">APA ITU SRS?</span>
+      <h3>Spaced Repetition</h3>
+      <p>Mode SRS itu latihan tanpa akhir yang niru cara otak paling gampang inget sesuatu.</p>
+      <p><b>Jawab benar</b> &rarr; soal itu muncul lagi nanti, jaraknya makin lama tiap kali kamu jawab benar terus-terusan.</p>
+      <p><b>Jawab salah</b> &rarr; soal itu balik muncul dalam beberapa soal ke depan, biar langsung diulang.</p>
+      <p>Beda dari Mode Ujian yang cuma 50 soal lalu berhenti, Mode SRS terus jalan sampai kamu tekan "Selesai". Progres disimpan otomatis di HP/browser ini.</p>
+      <button id="srsModalClose" type="button">Mengerti</button>
+    </div>
+  </div>
 
   <div class="rally" id="rally">
     <div class="rally-stats">
@@ -136,7 +167,7 @@
   <div class="stage" style="margin-top:16px;">
 
     <div class="start-panel" id="startPanel">
-      <p>Simulasi 50 soal ala JLPT untuk level yang kamu pilih di atas. Ada soal bacaan kanji, arti kosakata, dan tata bahasa. Pilih dulu mode kanji-nya, lalu mulai.</p>
+      <p>Pilih level dan mode kanji di atas, lalu pilih <b>Ujian</b> untuk simulasi 50 soal dengan hasil di akhir, atau <b>SRS</b> untuk latihan tanpa henti yang otomatis mengulang soal yang sering salah.</p>
       <button class="start-btn" id="startBtn">Mulai Latihan</button>
     </div>
 
@@ -149,6 +180,7 @@
       </div>
       <div class="options" id="options"></div>
       <div class="next-row" id="nextRow"></div>
+      <button class="finish-btn hidden" id="finishBtn">Selesai Latihan SRS</button>
     </div>
 
     <div class="results hidden" id="resultsPanel">
@@ -170,12 +202,80 @@ const EXAM = {"n5": [{"type": "reading", "prompt": ["番号"], "options": ["ち�
 
 let level = "n5";
 let mode = "full"; // full | furigana
+let examMode = "exam"; // exam | srs
 let deck = [];
 let qPos = 0;
 let correctCount = 0;
 let wrongCount = 0;
 let wrongLog = [];
 let answered = false;
+
+// assign a stable id to every question so SRS progress can be tracked
+["n5","n4"].forEach(lv=>{
+  EXAM[lv].forEach((q,i)=>{ q.id = lv + "_" + i; });
+});
+
+// ---------- SRS engine ----------
+const SRS_KEY = "tokika_srs_latihan_soal";
+let srsData = {};
+let missedQueue = [];
+let qCounter = 0;
+function loadSRS(){
+  try{ srsData = JSON.parse(localStorage.getItem(SRS_KEY)) || {}; }catch(e){ srsData = {}; }
+}
+function saveSRS(){
+  try{ localStorage.setItem(SRS_KEY, JSON.stringify(srsData)); }catch(e){}
+}
+function getSRS(id){
+  return srsData[id] || { ease:2.5, interval:0, due:0, reps:0 };
+}
+function gradeSRS(id, correct){
+  const s = getSRS(id);
+  const now = Date.now();
+  if(correct){
+    s.reps += 1;
+    if(s.reps === 1) s.interval = 10;
+    else if(s.reps === 2) s.interval = 1440;
+    else s.interval = Math.round(s.interval * s.ease);
+    s.ease = Math.min(s.ease + 0.1, 3.0);
+    s.due = now + s.interval * 60000;
+  } else {
+    s.reps = 0;
+    s.interval = 1;
+    s.ease = Math.max(s.ease - 0.2, 1.3);
+    s.due = now;
+    missedQueue.push({ id, showAt: qCounter + 2 + Math.floor(Math.random()*2) });
+  }
+  srsData[id] = s;
+  saveSRS();
+}
+function pickSRSCard(){
+  qCounter++;
+  const pool = EXAM[level];
+  const ready = missedQueue.filter(m => m.showAt <= qCounter);
+  if(ready.length){
+    const pick = ready[0];
+    missedQueue = missedQueue.filter(m => m !== pick);
+    const found = pool.find(q => q.id === pick.id);
+    if(found) return found;
+  }
+  const now = Date.now();
+  const withState = pool.map(q => ({ q, s: getSRS(q.id) }));
+  const due = withState.filter(x => x.s.due <= now);
+  if(due.length){
+    due.sort((a,b)=> a.s.due - b.s.due);
+    return shuffle(due.slice(0, Math.min(5, due.length)))[0].q;
+  }
+  const unseen = withState.filter(x => x.s.reps === 0 && x.s.due === 0);
+  if(unseen.length){ return shuffle(unseen)[0].q; }
+  withState.sort((a,b)=> a.s.due - b.s.due);
+  return withState[0].q;
+}
+function srsDueCount(){
+  const now = Date.now();
+  return EXAM[level].filter(q => getSRS(q.id).due <= now).length;
+}
+loadSRS();
 
 const els = {
   levelN5: document.getElementById("levelN5"),
@@ -202,6 +302,12 @@ const els = {
   verdictEl: document.getElementById("verdictEl"),
   reviewList: document.getElementById("reviewList"),
   restartBtn: document.getElementById("restartBtn"),
+  btnModeExam: document.getElementById("btnModeExam"),
+  btnModeSrs: document.getElementById("btnModeSrs"),
+  srsHelp: document.getElementById("srsHelp"),
+  srsModal: document.getElementById("srsModal"),
+  srsModalClose: document.getElementById("srsModalClose"),
+  finishBtn: document.getElementById("finishBtn"),
 };
 
 const TAG_LABEL = { reading: "Bacaan", meaning: "Arti", grammar: "Tata Bahasa" };
@@ -241,11 +347,20 @@ function plainPrompt(segments){
 }
 
 function startExam(){
-  deck = shuffle(EXAM[level]).slice(0, 50);
-  qPos = 0; correctCount = 0; wrongCount = 0; wrongLog = [];
   els.startPanel.classList.add("hidden");
   els.resultsPanel.classList.add("hidden");
   els.quizArea.classList.remove("hidden");
+  qPos = 0; correctCount = 0; wrongCount = 0; wrongLog = [];
+
+  if(examMode === "srs"){
+    deck = null; // not used in SRS mode
+    els.progressFill.parentElement.classList.add("hidden");
+    els.finishBtn.classList.remove("hidden");
+  } else {
+    deck = shuffle(EXAM[level]).slice(0, 50);
+    els.progressFill.parentElement.classList.remove("hidden");
+    els.finishBtn.classList.add("hidden");
+  }
   renderStats();
   buildQuestion();
 }
@@ -253,8 +368,13 @@ function startExam(){
 function renderStats(){
   els.statCorrect.textContent = correctCount;
   els.statWrong.textContent = wrongCount;
-  els.statNum.textContent = (qPos+1) + "/" + deck.length;
-  els.progressFill.style.width = Math.round((qPos/deck.length)*100) + "%";
+  if(examMode === "srs"){
+    els.statNum.textContent = srsDueCount() + " jatuh tempo";
+    els.progressFill.style.width = "0%";
+  } else {
+    els.statNum.textContent = (qPos+1) + "/" + deck.length;
+    els.progressFill.style.width = Math.round((qPos/deck.length)*100) + "%";
+  }
 }
 
 function buildQuestion(){
@@ -264,8 +384,8 @@ function buildQuestion(){
   els.card.classList.remove("shake");
   els.nextRow.innerHTML = "";
 
-  const q = deck[qPos];
-  els.qIndex.textContent = (qPos+1) + " / " + deck.length;
+  const q = examMode === "srs" ? pickSRSCard() : deck[qPos];
+  els.qIndex.textContent = examMode === "srs" ? "Latihan SRS" : (qPos+1) + " / " + deck.length;
   els.qTag.textContent = TAG_LABEL[q.type] || "Soal";
   els.promptEl.innerHTML = renderPrompt(q.prompt);
 
@@ -303,16 +423,22 @@ function handleAnswer(btn, text, q){
     els.card.classList.add("shake");
     wrongLog.push({ prompt: plainPrompt(q.prompt), answer: q.answer, given: text });
   }
+  if(examMode === "srs"){ gradeSRS(q.id, isCorrect); }
   renderStats();
 
   const next = document.createElement("button");
   next.className = "next-btn";
-  const isLast = qPos >= deck.length - 1;
-  next.textContent = isLast ? "Lihat Hasil" : "Lanjut →";
-  next.addEventListener("click", ()=>{
-    if(isLast){ showResults(); }
-    else { qPos++; buildQuestion(); }
-  });
+  if(examMode === "srs"){
+    next.textContent = "Lanjut →";
+    next.addEventListener("click", ()=>{ buildQuestion(); });
+  } else {
+    const isLast = qPos >= deck.length - 1;
+    next.textContent = isLast ? "Lihat Hasil" : "Lanjut →";
+    next.addEventListener("click", ()=>{
+      if(isLast){ showResults(); }
+      else { qPos++; buildQuestion(); }
+    });
+  }
   els.nextRow.appendChild(next);
 }
 
@@ -362,6 +488,23 @@ els.modeFuri.addEventListener("click", ()=>{
 els.startBtn.addEventListener("click", startExam);
 els.restartBtn.addEventListener("click", ()=>{
   els.resultsPanel.classList.add("hidden");
+  els.startPanel.classList.remove("hidden");
+});
+els.btnModeExam.addEventListener("click", ()=>{
+  examMode = "exam";
+  els.btnModeExam.classList.add("active"); els.btnModeSrs.classList.remove("active");
+  els.startPanel.classList.remove("hidden"); els.quizArea.classList.add("hidden"); els.resultsPanel.classList.add("hidden");
+});
+els.btnModeSrs.addEventListener("click", ()=>{
+  examMode = "srs";
+  els.btnModeSrs.classList.add("active"); els.btnModeExam.classList.remove("active");
+  els.startPanel.classList.remove("hidden"); els.quizArea.classList.add("hidden"); els.resultsPanel.classList.add("hidden");
+});
+els.srsHelp.addEventListener("click", ()=>{ els.srsModal.classList.remove("hidden"); });
+els.srsModalClose.addEventListener("click", ()=>{ els.srsModal.classList.add("hidden"); });
+els.srsModal.addEventListener("click", (e)=>{ if(e.target.id === "srsModal") e.target.classList.add("hidden"); });
+els.finishBtn.addEventListener("click", ()=>{
+  els.quizArea.classList.add("hidden");
   els.startPanel.classList.remove("hidden");
 });
 </script>

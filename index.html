@@ -96,7 +96,7 @@
   .ebook-price .old{ font-size:13px; color:var(--ink-soft); text-decoration:line-through; margin-left:8px; font-weight:400; }
 
   /* ---------- Practice cards ---------- */
-  .practice-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:16px; }
+  .practice-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }
   .practice-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:24px 20px; text-align:center; transition:transform .15s ease, border-color .15s ease; position:relative; }
   .practice-card:hover{ transform:translateY(-4px); border-color:var(--indigo); }
   .practice-card .glyph{ font-family:'Shippori Mincho',serif; font-size:38px; font-weight:800; color:var(--ink); margin-bottom:10px; }
@@ -120,10 +120,9 @@
   @media (max-width:720px){
     .hero h1{ font-size:30px; }
     .ebook-grid{ grid-template-columns:1fr; }
-    .practice-grid{ grid-template-columns:1fr 1fr; }
   }
-  @media (max-width:460px){
-    .practice-grid{ grid-template-columns:1fr; }
+  @media (min-width:760px){
+    .practice-grid{ grid-template-columns:repeat(4, 1fr); }
   }
   @media (max-width:360px){
     nav{ flex-wrap:wrap; gap:10px; justify-content:center; text-align:center; }
